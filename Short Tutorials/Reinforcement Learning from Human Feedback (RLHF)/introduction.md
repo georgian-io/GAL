@@ -31,7 +31,7 @@ The third step utilizes reinforcement learning to train the model from step 1 (s
 
 * How is the first step (SFT) different from just finetuning a model like BERT?
   
-  It isn't! The first step is the same as finetuning older LLMs. 
+  It isn't! The first step is the same as finetuning older LLMs such as BERT. 
 
 * Why do we train a reward model and perform reinforcement learning? Why not just use the human preferences to directly train the LLM?
 
@@ -41,7 +41,7 @@ The third step utilizes reinforcement learning to train the model from step 1 (s
 
 * Manually having annotators rank outputs is both expensive and time-consuming. What are my alternatives?
 
-  In some cases, we might already have the rankings we need. For example, the [Stack Exchange Preferences Dataset](https://huggingface.co/datasets/lvwerra/stack-exchange-paired) consists of pairs of answers to Stack Exchange questions. Since the platform already uses a voting system, these existing votes can be used as the ranking instead. There are also existing open source datasets such as [Anthropic's hh-rlhf](https://huggingface.co/datasets/Anthropic/hh-rlhf).
+  In some cases, we might already have the rankings we need. For example, the [Stack Exchange Preferences Dataset](https://huggingface.co/datasets/lvwerra/stack-exchange-paired) consists of pairs of answers to Stack Exchange questions. Since the platform already uses a voting system, these existing votes can be used as the ranking instead. Similarly, other websites such as reddit also have a voting system and thus could be used in place of human annotators. There are also existing open source datasets such as [Anthropic's hh-rlhf](https://huggingface.co/datasets/Anthropic/hh-rlhf).
 
 * Some of these models have billions of parameters. How do they train these models efficiently?
 
@@ -57,12 +57,19 @@ The third step utilizes reinforcement learning to train the model from step 1 (s
 
 * How do we validate the human preferences obtained for step 2? If we have 10 different outputs for a prompt, people are likely to rank them in different orders due to their own biases. Thus we can't use a single person's ranking. But how many people do we need for this? Do we use a majority ranking or an average? 
 
-  [InstructGPT (section 5.3)](https://arxiv.org/abs/2203.02155) used around 40 labelers but there was rarely any overlap in the comparisons that they labeled. OpenAI acknowledges that this isn't ideal but does note that the labelers tended to agree with each other roughly 70% of the time.
+  [InstructGPT (section 5.3)](https://arxiv.org/abs/2203.02155) used around 40 labelers but there was rarely any overlap in the comparisons that they labeled. OpenAI acknowledges that this isn't ideal but does note that the labelers tended to agree with each other roughly 70% of the time. They also note that simply taking the average preference doesn't always work. For example when generating text that affects a minority group negatively, that group's preferences should be weighed more heavily.
   
 # Open Questions
 
 This section consists of interesting questions that we don't yet have an answer to/are in the process of figuring out.
 
+* What is a good number for perplexity/accuracy/reward for each of the steps?
+
+* How big of a model do we need to get good results?
+
+* What hyper-parameters make the most impact on the results?
+
+* What is the smallest working model that we can train on readily available GPUs like a T4 used in Colab Free?
 
 
 # Resources
