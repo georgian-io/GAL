@@ -1,6 +1,6 @@
 # Reinforcement Learning from Human Feedback (RLHF)
 
-RLHF is one of the hottest topics of 2023 with several Large Language Models (LLMs) such as OpenAI's ChatGPT and DeepMind's Sparrow. It consists of three steps that combine supervised training and reinforcement learning. 
+RLHF is one of the hottest topics of 2023 with several Large Language Models (LLMs) including OpenAI's ChatGPT and DeepMind's Sparrow utilizing it. It consists of three steps that combine supervised training and reinforcement learning. 
 
 ![RLHF Overview diagram from OpenAI's ChatGPT blogpost](images/ChatGPT_Diagram.svg "RLHF Overview")
 RLHF Overview from OpenAI's [ChatGPT blogpost.](https://openai.com/blog/chatgpt)
@@ -59,17 +59,25 @@ The third step utilizes reinforcement learning to train the model from step 1 (s
 
   [InstructGPT (section 5.3)](https://arxiv.org/abs/2203.02155) used around 40 labelers but there was rarely any overlap in the comparisons that they labeled. OpenAI acknowledges that this isn't ideal but does note that the labelers tended to agree with each other roughly 70% of the time. They also note that simply taking the average preference doesn't always work. For example when generating text that affects a minority group negatively, that group's preferences should be weighed more heavily.
   
-# Open Questions
-
-This section consists of interesting questions that we don't yet have an answer to/are in the process of figuring out.
-
-* What is a good number for perplexity/accuracy/reward for each of the steps?
-
 * How big of a model do we need to get good results?
+
+  From our experience, the specific model and dataset(s) used is more important in determining performance. Consult the [Chatbot Arena Leaderboard](https://lmsys.org/blog/2023-05-25-leaderboard/). We see that in some cases smaller models outperform larger ones (such as Vicuna-7B outperforming Alpaca-13B). This does imply that we could get away with training a 7B parameter model and get good performance. However, note that larger models do tend to do better as seen in GPT, Claude and PaLM.
 
 * What hyper-parameters make the most impact on the results?
 
+  The folks in charge of DeepSpeed have an [entire document](https://github.com/microsoft/DeepSpeedExamples/blob/master/applications/DeepSpeed-Chat/training/README.md) detailing their study on this topic.
+
+* What is a good number for perplexity/accuracy/reward for each of the steps?
+
+  We found that a perplexity of around 1.8 for step 1, a reward model accuracy of over 60% and an average reward of at least 5 tended to result in a model that worked relatively well in our tests. However, this is by no means a guarantee that your model will work well. According to the [DeepSpeed repository](https://github.com/microsoft/DeepSpeedExamples/blob/master/applications/DeepSpeed-Chat/training/README.md), although the perplexity stabilized within 1-2 epochs, they found that training it for longer (around 16 epochs) resulted in better generation quality.
+
 * What is the smallest working model that we can train on readily available GPUs like a T4 used in Colab Free?
+
+  Although we haven't been able to train an LLM on a T4 like in Google Colab, we found that we could train a 7B parameter model at a relatively low cost (~$17). You can find more details about this in the `quickstart.md` documented located in this repository.
+
+# Open Questions
+
+This section consists of interesting questions that we don't yet have an answer to/are in the process of figuring out.
 
 
 # Resources

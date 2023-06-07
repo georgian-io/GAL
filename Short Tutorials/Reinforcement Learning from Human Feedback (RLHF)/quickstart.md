@@ -54,7 +54,7 @@ We build the following table detailing the time taken per model based on our exp
 |      | Step 1 (Epochs) | Step 2 | Step 3 | Total | Cost     |
 |------|-----------------|--------|--------|-------|----------|
 | 1.3b | ~8.5h (5)       | 1028s  | 5h48m  | ~15h  | ~$17     |
-| 6.7b | 5h (2)          | 1028s  |        |       |          |
+| 6.7b | 5h (2)          | 1028s  | -      | -     | -        |
 
 Time taken per step of training per model. 
 
@@ -63,7 +63,7 @@ We also share the model's metrics at each training step. Note that each step use
 |      | Step 1 (Perplexity)  | Step 2 (Average Score) | Step 2 (Accuracy) | Step 3 (Average Reward) |
 |------|----------------------|------------------------|-------------------|-------------------------|
 | 1.3b | 1.84511              | 9.70320                | 0.63624           | 11.125                  |
-| 6.7b | 1.87273              | 9.70320                | 0.63624           |                         |
+| 6.7b | 1.87273              | 9.70320                | 0.63624           | -                       |
 
 **Note**: Since the reward model is independent of the LLM, we used the same reward model in all cases. Thus the metrics and times are the same everywhere.
 
