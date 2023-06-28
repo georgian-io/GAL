@@ -86,6 +86,10 @@ This section consists of interesting questions that we don't yet have an answer 
 
 # Resources
 
-* [wandb rlhf tutorial](https://wandb.ai/carperai/summarize_RLHF/reports/Implementing-RLHF-Learning-to-Summarize-with-trlX--VmlldzozMzAwODM2)
-* [Microsoft DeepSpeed](https://github.com/microsoft/DeepSpeed/tree/master/blogs/deepspeed-chat)
-* [Hugging Face's StackLLaMa](https://huggingface.co/blog/stackllama)
+* [Dahoas/rm-static](https://huggingface.co/datasets/Dahoas/rm-static): An example of the kind of data that the reward model training requires.
+* [https://github.com/heartexlabs/RLHF/blob/master/tutorials/RLHF_with_Custom_Datasets.ipynb](RLHF With Custom Datasets): A quick guide to using RLHF with a custom dataset.
+* [https://huyenchip.com/2023/05/02/rlhf.html](RLHF: Reinforcement Learning from Human Feedback): Blog post from Chip Huyen.
+* [wandb rlhf tutorial](https://wandb.ai/carperai/summarize_RLHF/reports/Implementing-RLHF-Learning-to-Summarize-with-trlX--VmlldzozMzAwODM2): A tutorial on training a summarization model via RLHF.
+* [Microsoft DeepSpeed](https://github.com/microsoft/DeepSpeed/tree/master/blogs/deepspeed-chat): DeepSpeed is a deep learning optimization library. It also offers a relatively easy way to get started with RLHF.
+* [Hugging Face's StackLLaMa](https://huggingface.co/blog/stackllama): An instructive blog post on training LLaMA with RLHF.
+* [Rank Response to align Human Feedback (RRHF)](https://github.com/GanjinZero/RRHF): This is an alternative to RLHF that is in active development. They claim comparable performance to RLHF-based models with a simpler training paradigm.
