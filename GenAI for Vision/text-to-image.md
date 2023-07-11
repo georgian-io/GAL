@@ -173,7 +173,11 @@ There are also other options such as Google's [Imagen](https://imagen.research.g
 
 ## 7. Getting Started
 
-For StableDiffusion, we have an example notebook setup for you at `examples/stable_diffusion.ipynb` (we've tested this on Colab free, you just need to use a T4 GPU!). Midjourney is currently available only through their [Discord](https://discord.com/invite/midjourney) server, so we recommend you try it out there instead. For OpenAI, we have an example notebook setup for you at `examples/openai.ipynb` (you can run this locally). Note that you will need to provide an OpenAI key and you will be charged for using it (approx $0.016 / 256x256 image). If you just want to play around with the model, we suggest using the [website](https://labs.openai.com/) which offers limited free credits to generate images with.
+* For StableDiffusion, we have an example notebook setup for you at `examples/stable_diffusion.ipynb` (we've tested this on Colab free, you just need to use a T4 GPU!). If you don't want to go through code at the moment, you could just play around with [StabilityAI's HuggingFace Space](https://huggingface.co/spaces/stabilityai/stable-diffusion).
+
+* Midjourney is currently available only through their [Discord](https://discord.com/invite/midjourney) server, so we recommend you try it out there instead. 
+
+* For OpenAI, we have an example notebook setup for you at `examples/openai.ipynb` (you can run this locally). Note that you will need to provide an OpenAI key and you will be charged for using it (approx $0.016 / 256x256 image). If you just want to play around with the model, we suggest using the [website](https://labs.openai.com/) which offers limited free credits to generate images with.
 
 [[Back to top]](#)
 
