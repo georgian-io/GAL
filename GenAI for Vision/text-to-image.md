@@ -138,7 +138,7 @@ The model consists of three components:
     * Input: Information array
     * Output: RGB Image
 
-Customization: You can create images from prompts, you can perform inpainting, you can modify images, upscale, zoom out etc. You can pretty much do anything the other models can (or the open source community will get something setup for it if it doesn't exist already!).
+Customization: You can create images from prompts, you can perform inpainting, you can modify images, upscale, zoom out etc. You can pretty much do anything the other models can (or the open source community will get something setup for it if it doesn't exist already!). The latest Stable Diffusion XL model can generate 2048x2048 images too!
 
 [[Back to top]](#)
 
