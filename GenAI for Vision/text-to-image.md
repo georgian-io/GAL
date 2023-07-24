@@ -138,7 +138,7 @@ The model consists of three components:
     * Input: Information array
     * Output: RGB Image
 
-Customization: You can create images from prompts, you can perform inpainting, you can modify images, upscale, zoom out etc. You can pretty much do anything the other models can (or the open source community will get something setup for it if it doesn't exist already!).
+Customization: You can create images from prompts, you can perform inpainting, you can modify images, upscale, zoom out etc. You can pretty much do anything the other models can (or the open source community will get something setup for it if it doesn't exist already!). The latest Stable Diffusion XL model can generate 2048x2048 images too!
 
 [[Back to top]](#)
 
@@ -146,7 +146,7 @@ Customization: You can create images from prompts, you can perform inpainting, y
 
 Midjourney is another popular image generation model favored by the community. However Midjourney is closed source, meaning we don't know the exact architecture and we can't finetune it for our own purposes. Though there are some [hints](https://twitter.com/EMostaque/status/1561917541743841280) that it runs on a variant of Stable Diffusion. Midjourney excels at more "aesthetically pleasing" generations compared to Stable Diffusion and DALL-E. However this sometimes results in the model ignoring parts of your prompt to make things look pretty.
 
-At present, Midjourney is only available through their [Discord](https://discord.com/invite/midjourney) server. It offers a free plan of up to 25 images, after which you must subscribe to one of their plans. Note that as a free user, all your prompts and generations are publicly visible in the Discord channel. If you are a subscriber, you can send your prompts privately to the bot.
+At present, Midjourney is only available through their [Discord](https://discord.com/invite/midjourney) server. Midjourney no longer offers a free tier so you will have to subscribe to one of their plans to use it. Note that unless you use their highest tier, all your images will be publicly visible. Subscribers to their Pro Plan, can use a "stealth" mode.
 
 Customization: You can create images from prompts but you can also modify images by uploading your own. You can also upscale the generated images or make variations of a generated/uploaded image. They also have a "zoom out" feature that lets you extend the boundaries of an image.
 
@@ -157,7 +157,7 @@ Customization: You can create images from prompts but you can also modify images
 DALL-E is OpenAI's (of ChatGPT fame) solution to the text-to-image problem. We're specifically 
 gonna be talking about DALL-E 2 (the original DALL-E used a dVAE based architecture, not a diffusion model). The underlying model used by DALL-E is [GLIDE](https://arxiv.org/abs/2112.10741?) which is a type of diffusion model. 
 
-Getting images from DALL-E is as simple as making calls to OpenAI's [API](https://platform.openai.com/docs/guides/images/image-generation-beta). 
+Getting images from DALL-E is as simple as making calls to OpenAI's [API](https://platform.openai.com/docs/guides/images/image-generation-beta). Their documentation explains how to use the API relatively well.
 
 Customization: You can create images from prompts, you can mask out parts of an image and ask it to inpaint it and you can ask for variations of a given image. You can also choose between generating 256x256, 512x512 and 1024x1024 images.
 
@@ -169,15 +169,25 @@ In short, if you just want to use something quickly without much hassle and don'
 
 There are also other options such as Google's [Imagen](https://imagen.research.google/) which we haven't included here since they are not publicly accessible at the time of writing.
 
+To help understand how these models work a little better, here are some sample generations along with the prompts used. We only compare Dall-E and Stable Diffusion here since they are the easiest to use in a production environment. All images were generated on July 13th 2023 with [Dall-E 2]((https://labs.openai.com/)) and [Stable Diffusion XL 0.9](https://clipdrop.co/stable-diffusion). 
+
+| Prompt | DALL-E 2 | Stable Diffusion |
+|--------|----------|------------------|
+| An apartment building designed like a fridge.             | ![](images/dalle_fridge.png)  | ![](images/sdxl_fridge.jpeg) |
+| A margherita pizza in a restaurant overlooking the sea.   | ![](images/dalle_pizza.png)   | ![](images/sdxl_pizza.jpeg) |
+| A man in a suit and top hat walking down a dark alleyway. | ![](images/dalle_alley.png)   | ![](images/sdxl_alley.jpeg) |
+
+We leave these images with an obligatory disclaimer - none of these prompts were tuned. You are likely to get far better results after tuning these prompts per model. We link to a guide to this in the resources section below.
+
 [[Back to top]](#)
 
 ## 7. Getting Started
 
-* For StableDiffusion, we have an example notebook setup for you at `examples/stable_diffusion.ipynb` (we've tested this on Colab free, you just need to use a T4 GPU!). If you don't want to go through code at the moment, you could just play around with [StabilityAI's HuggingFace Space](https://huggingface.co/spaces/stabilityai/stable-diffusion).
+* For StableDiffusion, we have an example notebook setup for you at `examples/text_to_image_stable_diffusion.ipynb` (we've tested this on Colab free, you just need to use a T4 GPU!). If you don't want to go through code at the moment, you could just play around with [StabilityAI's Stable Diffusion XL](https://clipdrop.co/stable-diffusion).
 
-* Midjourney is currently available only through their [Discord](https://discord.com/invite/midjourney) server, so we recommend you try it out there instead. 
+* Midjourney is currently available only through their [Discord](https://discord.com/invite/midjourney) server, so we recommend you try it out there instead. Note that there is no longer a free tier for this service.
 
-* For OpenAI, we have an example notebook setup for you at `examples/openai.ipynb` (you can run this locally). Note that you will need to provide an OpenAI key and you will be charged for using it (approx $0.016 / 256x256 image). If you just want to play around with the model, we suggest using the [website](https://labs.openai.com/) which offers limited free credits to generate images with.
+* For OpenAI, we have an example notebook setup for you at `examples/text_to_image_dalle.ipynb` (you can run this locally). Note that you will need to provide an OpenAI key and you will be charged for using it (approx $0.016 / 256x256 image). If you just want to play around with the model, we suggest using the [website](https://labs.openai.com/) which offers limited free credits to generate images with.
 
 [[Back to top]](#)
 
@@ -186,3 +196,5 @@ There are also other options such as Google's [Imagen](https://imagen.research.g
 * [The Illustrated Stable Diffusion](http://jalammar.github.io/illustrated-stable-diffusion/): A blog post by the excellent Jay Alammar
 
 * [Awesome Generative AI](https://github.com/filipecalegario/awesome-generative-ai): A collection of GenAI resources (including text, audio and video!)
+
+* [The Ultimate Prompting Guide](https://prompthero.com/stable-diffusion-prompt-guide): An informative and easy to follow guide on how to get the most out of text-to-image models.
