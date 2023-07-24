@@ -68,6 +68,26 @@ All three objectives (ITC, ITM, LM) are optimized during the pre-training proces
 
 [This](https://blog.salesforceairesearch.com/blip-bootstrapping-language-image-pretraining/) blog from the Salesforce teams takes a deeper dive into this model. The BLIP model is a fairly robust model that works well for most vision-language tasks and thus is a good starting point for any work in this area. The model can be used through [HuggingFace](https://huggingface.co/Salesforce/blip-image-captioning-large).
 
+## 6. [BLIP 2](https://arxiv.org/abs/2301.12597)
+
+![BLIP 2 Architecture](images/blip2_architecture.png)
+
+Source: [BLIP 2 paper](https://arxiv.org/abs/2301.12597)
+
+While one might think that BLIP-2 is just a more advanced version of BLIP's architecture, they actually are quite different. BLIP-2 uses three different components - an image encoder, a Large Language Model and a Querying Transformer (Q-Former). The image encoder and LLM are frozen off-the-shelf models. Specifically, the authors tested ViT-L/14 from CLIP and ViT-g/14 from EVA-CLIP for the image transformer, and a decoder-based LLM (OPT family) as well as an encoder-decoder LLM (Flan-T5 family) for the choice of LLM. These models can presumably be replaced with any other model in the same category. The Q-Former is the only trainable part of BLIP-2 which aims to address the vision-language alignment problem between the embedding space of the frozen image encoder and the frozen LLM. 
+
+The Q-Former consists of two transformer submodules that share the same self-attention layers (architecture below). The first is an image transformer that interacts with the frozen image encoder to extract visual features while the second is a text transformer that functions as both a text encoder and decoder. In addition, a set number of learnable query embeddings are created to act as an input to the image transformer. The Q-Former does not directly interact with the image encoder. Instead, the extracted features are inserted in the cross-attention layers of every other transformer block. The queries interact with each other (and to text data) through self-attention and interact with the image features through the cross-attention layers. The idea is that these query embeddings learn to extract the features of the image that is most relevant to the text. The Q-Former is initialized with a pretrained BERT model's weights (with the cross attention layers being randomly initialized). Training proceeds in a two-phase fashion.
+
+![Q-Former Architecture & Phase 1 Training](images/blip2_phase1.png)
+Source: [BLIP 2 paper](https://arxiv.org/abs/2301.12597)
+
+In the first phase, the image encoder and the Q-Former are trained using image-text pairs. Inspired by BLIP, they use three loss functions - ITC and ITM which were used by BLIP, as well as an Image-grounded Text Generation (ITG) loss function. In ITG, the goal is to generate text (using a causal attention mask) conditioned on an image. This helps to train the query embeddings to extract the most relevant features. 
+
+![Q-Former Architecture & Phase 1 Training](images/blip2_phase2.png)
+Source: [BLIP 2 paper](https://arxiv.org/abs/2301.12597)
+
+In the second phase, the frozen image encoder + Q-Former combo is connected to the frozen LLM. A fully connected layer projects the output query embeddings from the Q-Former into the dimension required by the LLM. These are then prepended to the input of the model. The authors state that these embeddings act as soft visual prompts that condition the LLM on visual representations extracted by the Q-Former. The exact process is slightly different depending on the LLM (decoder only vs encoder-decoder) as seen in the image above.
+
 ## 6. Getting Started
 
 We have two example notebooks for you to get started with! The first is `im2text_finetuning.ipynb` which walks you through the process of fine-tuning an image-to-text model (BLIP). The second is `im2text_applications.ipynb` which is a quick demo for you to see how image captioning and VQA works.
@@ -77,3 +97,5 @@ We have two example notebooks for you to get started with! The first is `im2text
 * [A Dive into Vision-Language Models](https://huggingface.co/blog/vision_language_pretraining): An informative blog from HuggingFace.
 
 * [BLIP: Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation](https://blog.salesforceairesearch.com/blip-bootstrapping-language-image-pretraining/): A summary of the BLIP model from the Salesforce team.
+
+* [Interactive demo: comparing image captioning models](https://huggingface.co/spaces/nielsr/comparing-captioning-models): A useful tool to compare the results of GIT, BLIP, BLIP-2 and InstructBLIP on the same image.
