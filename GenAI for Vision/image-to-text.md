@@ -97,7 +97,7 @@ In the first phase, the image encoder and the Q-Former are trained using image-t
 ![Q-Former Architecture & Phase 1 Training](images/blip2_phase2.png)
 Source: [BLIP 2 paper](https://arxiv.org/abs/2301.12597)
 
-In the second phase, the frozen image encoder + Q-Former combo is connected to the frozen LLM. A fully connected layer projects the output query embeddings from the Q-Former into the dimension required by the LLM. These are then prepended to the input of the model. The authors state that these embeddings act as soft visual prompts that condition the LLM on visual representations extracted by the Q-Former. The exact process is slightly different depending on the LLM (decoder only vs encoder-decoder) as seen in the image above.
+In the second phase, the frozen image encoder + Q-Former combo is connected to the frozen LLM. A fully connected layer projects the output query embeddings from the Q-Former into the dimension required by the LLM. These are then prepended to the input of the model. The authors state that these embeddings act as soft visual prompts that condition the LLM on visual representations extracted by the Q-Former. The exact process is slightly different depending on the LLM (decoder only vs encoder-decoder) as seen in the image above. In both cases, some form of the Language Modeling (LM) loss is used.
 
 [[Back to top]](#)
 
