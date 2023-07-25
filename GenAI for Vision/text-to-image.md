@@ -22,6 +22,8 @@ In the next section, we first examine the U-Net, which is the model traditionall
     
     2.2. [DDIM](#22-denoising-diffusion-implicit-models)
 
+    2.3. [Textual Inversion](#23-textual-inversion)
+
 3. [Stable Diffusion](#3-stable-diffusion)
 
 4. [Midjourney](#4-Midjourney)
@@ -108,7 +110,18 @@ One issue with DDPM is that the sampling process is slow since there are many ti
 
 DDIM is faster because it skips a bunch of timesteps. Essentially this makes the model predict a rougher idea of what the final output would look like. The trade-off is of course that the results aren't as good as DDPM. 
 
-Note: Regardless of how the model was trained, we can use either DDPM or DDIM since they are both just sampling methods.
+Note: Regardless of how the model was trained, we can use either DDPM or DDIM since they are both just sampling methods. HuggingFace implements a wide variety of these sampling algorithms and more information can be found [here](https://huggingface.co/docs/diffusers/v0.3.0/en/api/schedulers#implemented-schedulers).
+
+[[Back to top]](#)
+
+## 2.3. [Textual Inversion](https://arxiv.org/abs/2208.01618)
+
+![Textual Inversion](images/textual_inversion.png)
+Source: [Textual Inversion Paper](https://arxiv.org/abs/2208.01618)
+
+Textual inversion is an interesting technique that arose as a way to achieve very fine-grained control of the generated image. In essence, it involves teaching the model to learn a new "word" in its embedding space. That is, we finetune the model on prompt+image combinations that use the new word. The prompts here are variations of the phrase "This is a picture of X" and the image is usually a noisy picture of the concept, which the model attempts to denoise. Then by using this new word in prompts, we can obtain very specific images that use the concept associated with this word. Note that the aim of this process it to just learn a new embedding for the target word. Thus all the other layers are frozen and even within the embedding layer, only the new embedding is trained. The gradients for all other tokens are zeroed out. 
+
+Textual inversion can be used for a number of different applications.  The obvious one is of course text-guided generation of images but this technique can also be used for style transfer and even bias reduction! You can see this in action in the paper or in this [blog post](https://textual-inversion.github.io/).
 
 [[Back to top]](#)
 
