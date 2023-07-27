@@ -182,13 +182,13 @@ In short, if you just want to use something quickly without much hassle and don'
 
 There are also other options such as Google's [Imagen](https://imagen.research.google/) which we haven't included here since they are not publicly accessible at the time of writing.
 
-To help understand how these models work a little better, here are some sample generations along with the prompts used. We only compare Dall-E and Stable Diffusion here since they are the easiest to use in a production environment. All images were generated on July 13th 2023 with [Dall-E 2]((https://labs.openai.com/)) and [Stable Diffusion XL 0.9](https://clipdrop.co/stable-diffusion). 
+To help understand how these models work a little better, here are some sample generations along with the prompts used. We only compare Dall-E and Stable Diffusion here since they are the easiest to use in a production environment. Images were generated on July 13th 2023 with [Dall-E 2]((https://labs.openai.com/)) and [Stable Diffusion XL 0.9](https://clipdrop.co/stable-diffusion). We used Midjourney v5.2 to generate images on 27th July 2023.
 
-| Prompt | DALL-E 2 | Stable Diffusion |
-|--------|----------|------------------|
-| An apartment building designed like a fridge.             | ![](images/dalle_fridge.png)  | ![](images/sdxl_fridge.jpeg) |
-| A margherita pizza in a restaurant overlooking the sea.   | ![](images/dalle_pizza.png)   | ![](images/sdxl_pizza.jpeg) |
-| A man in a suit and top hat walking down a dark alleyway. | ![](images/dalle_alley.png)   | ![](images/sdxl_alley.jpeg) |
+| Prompt | DALL-E 2 | Stable Diffusion | Midjourney |
+|--------|----------|------------------|------------|
+| An apartment building designed like a fridge.             | ![](images/dalle_fridge.png)  | ![](images/sdxl_fridge.jpeg) | ![](images/midjourney_fridge.png) |
+| A margherita pizza in a restaurant overlooking the sea.   | ![](images/dalle_pizza.png)   | ![](images/sdxl_pizza.jpeg) | ![](images/midjourney_pizza.png) |
+| A man in a suit and top hat walking down a dark alleyway. | ![](images/dalle_alley.png)   | ![](images/sdxl_alley.jpeg) | ![](images/midjourney_alley.png) |
 
 We leave these images with an obligatory disclaimer - none of these prompts were tuned. You are likely to get far better results after tuning these prompts per model. We link to a guide to this in the resources section below.
 
