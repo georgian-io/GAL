@@ -51,34 +51,40 @@ So why do all diffusion models use the U-Net? There's no definitive answer but t
 
 ## 2. Diffusion
 
-Simply put, diffusion models are in the business of generating image by consecutively removing noise from some arbitrary noise vector. So how does this work?
+![Generative Model Overview](images/gen_model_overview.png)
+Source: [What are Diffusion Models?](https://lilianweng.github.io/posts/2021-07-11-diffusion-models/)
 
-Broadly this happens over three steps: the forward diffusion phase which is used to generate data samples, the training phase which trains a model to predict noise, and the image generation phase where the consecutive noise removal happens. 
+There's a whole bunch of generative models out there for images such as GANs, VAEs, and Flow-based models. Diffusion models are just the latest entry into this group. 
 
-We do this by subtracting the noise from the image at each stage. We do this over a number of steps (a tunable parameter) to give the model more training data and also improve training stability. 
+Simply put, diffusion models are in the business of generating image by consecutively removing noise from an image. So how does this work?
 
-1. Forward Diffusion:
-    * Pick an image from the dataset.
-    * Sample a random timestep (sometimes called a noise level). A higher timestep means the amount of noise is greater. This timestep is a parameter that we can set.
-    * Sample noise based on the noise level.
-    * Add the noise to the image.
+Broadly this happens over three steps: 
+1. The forward diffusion generates data samples:
+    * Select an image from the training data.
+    * Sample a random timestep (called a noise level). The higher the timestep, the larger the amount of noise generated. The total number of timesteps is a parameter.
+    * Sample noise based on this noise level. 
+    * Add the generated noise to the selected image.
+2. The training phase trains a noise-predicting model:
+    * Perform forward diffusion to obtain the noisy image as well as the generated noise.
+    * The model takes as input the noisy image and attempts to predict the noise that was added to it.
+    * Note: We don't necessarily train on every image for every possible timestep. We just sample random timesteps.
+3. The image generation occurs through a scheduling algorithm (also called a noise schedule):
+    * For illustrative purposes, we walk through an algorithm introduced in the paper [Denoising Diffusion Probabilistic Models](https://arxiv.org/abs/2006.11239) which is referred to as DDPM. 
+    * There are newer algorithms but this is simpler to understand.
+    * First, we sample random noise. This is the starting point for our image (think of the noise sample we do in a GAN).
+    * We pick a noise level and send it to the model alongside this random noise.
+    * The model predicts the noise added based on this noise level.
+    * We subtract this predicted noise from our original image (the starting random noise).
+    * This is our new starting point. A slightly denoised image that still just looks like noise.
+    * We repeat the above steps of picking a noise level, predicting the added noise and then subtracting it from the starting point image. 
+    * We keep repeating this until we reach the total number of timesteps required (which we can set).
+    * Note: It's important to pass in images with normally distributed noise to help stabilize the network. Otherwise it can collapse into the average of our training data. Thus we actually add a little noise after the denoising step to make the overall image fall into the normal distribution again. This addition is handled by the noise scheduler and is based on the current time step.
 
-2. Train Noise Predictor:
-    * Perform forward diffusion.
-    * The model takes this as input and predicts the noise added to the image.
-    * Note that we don't necessarily train on every image for every possible timestep. We sample random timesteps. 
+![Diffusion Process in Action](images/diffusion_model_in_action.gif)
+Source: [Stable Diffusion – A New Paradigm in Generative AI](https://learnopencv.com/stable-diffusion-generative-ai/)
 
-3. Sample/Generate Images:
-    * This sampling process is done via DDPM (Denoising Diffusion Probabilistic Models).
-    * Sample random noise and a noise level to the model.
-    * We get a predicted noise.
-    * Now subtract the predicted noise from the sample.
-    * Send the new image back to the model.
-    * We get a predicted noise.
-    * Now subtract the predicted noise from the sample.
-    * And so on until we reach the total number of timesteps.
-    * It is important that we use normally distributed noise for the denoising step to help stabilize the neural network. Otherwise it might just collapse into something that's just the average of the dataset. 
-    * Hence, in the denoising step we remove the predicted noise from the image but also add some noise to make the overall image fall into the same normal distribution. This added noise amount is based on the current time step.
+A natural question might be, why should we bother with a noise level? Why do we need to do this over so many steps? The simple answer is that we make the problem relatively easier. We aren't asking the model to generate an amazing piece of art from completely random noise. We just ask it to remove some noise from a noisy image. This not only gives us more training data but it also improves training stability.
+ 
 
 [[Back to top]](#)
 
