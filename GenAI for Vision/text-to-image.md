@@ -193,7 +193,7 @@ Stable Diffusion XL 1.0, also called SDXL 1.0, is, at the time of writing, the l
 
 6. Refinement Stage:
 
-    The authors found that the resulting model from the above steps sometimes resulted in poor quality generations. As a solution to this, they trained a separate latent diffusion model in the same latent space which focused on high-quality, high resolution data. During inference, they use the base model for the initial steps but use this refinement model for the later steps. That is, the refiner can be plugged in before we decode the generated image from the latent space to pixel space. While they note that the use of the refiner is optional, they found that the quality of images were significantly improved, especially for detailed background and human faces.
+    The authors found that the resulting model from the above steps sometimes resulted in poor quality generations. As a solution to this, they trained a separate latent diffusion model in the same latent space which focused on high-quality, high resolution data. This is done via a technique called [SDEdit](https://arxiv.org/abs/2108.01073) (which we aren't going into here). During inference, they use the base model for the initial steps but use this refinement model for the later steps. That is, the refiner can be plugged in before we decode the generated image from the latent space to pixel space. While they note that the use of the refiner is optional, they found that the quality of images were significantly improved, especially for detailed background and human faces.
 
 
 [[Back to top]](#)
