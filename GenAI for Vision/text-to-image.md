@@ -161,6 +161,43 @@ Customization: You can create images from prompts, you can perform inpainting, y
 
 [[Back to top]](#)
 
+## 3.1. [Stable Diffusion XL](https://arxiv.org/pdf/2307.01952.pdf)
+
+Stable Diffusion XL 1.0, also called SDXL 1.0, is, at the time of writing, the latest version of Stable Diffusion. This makes a number of improvements on the existing Stable Diffusion architecture:
+
+1. Architecture & Scale:
+
+    As newer models are wont to do, SDXL also has a lot more parameters, running in at 3.5B parameters for the base model compared to the measly ~900M parameters of previous versions. This is the result of a number of changes such as replacing the lower level features of the U-Net with transformer blocks and using a more powerful text encoder (for conditioning) by combining two text encoders - OpenCLIP ViT-bigG and CLIP ViT-L (which together make up about 817M parameters). In addition they also introduce a "refiner model" (more on that in a minute) which uses a whopping 6.6B parameters.
+
+2. Micro-Conditioning:
+
+    **Conditioning the Model on Image Size:**
+
+    An issue with previous versions was that a minimum image size (usually 512) had to be enforced thus forcing people to either discard (causing a loss in training data) or upscale smaller images (causing a loss in data quality). As a solution to this, they provide additional conditioning to the U-Net in the form of the original image's resolution. This solves the previous issue and also allows users to set a desired size during inference.
+
+    **Conditioning the Model on Cropping Parameters:**
+
+    Sometimes images are cropped to the lowest size image in the batch due to library requirements (For instance PyTorch requires tensors of the same size). This can result in generations having this cropped effect. As a solution to this, they provide additional conditioning to the U-Net in the form of two parameters signifying the amount of pixels cropped from the top left corner in both the vertical and horizontal axes. During inference, we can set these parameters to (0, 0) and thus resolve the issue of images looking like they were cropped.
+
+3. Multi-Aspect Training:
+
+    Many datasets used for this task tend to utilize square images of shape 512x512 or 1024x1024. The authors argue that this is unrealistic given the widespread use of landscape or portrait images. Thus they finetune the model to handle multiple aspect-ratios. They do this by partitioning their dataset into several buckets of different aspect ratios. While training, each batch uses images from the same bucket and the bucket used is alternated per step. The bucket size (height, width) is also sent to the model as conditioning. This step is done as fine-tuning after the pre-training process.
+
+4. Improved Autoencoder:
+
+    They use the same architecture as the original Stable Diffusion but use a much larger batch size and also track weights with an exponentially moving average.
+
+5. Overall Training Process
+
+    The base model is trained on images with a resolution of 256x256 while using size and crop-conditioning. Then, the model is trained on 512x512 images and finally multi-aspect training is done with different aspect ratios.
+
+6. Refinement Stage:
+
+    The authors found that the resulting model from the above steps sometimes resulted in poor quality generations. As a solution to this, they trained a separate latent diffusion model in the same latent space which focused on high-quality, high resolution data. During inference, they use the base model for the initial steps but use this refinement model for the later steps. That is, the refiner can be plugged in before we decode the generated image from the latent space to pixel space. While they note that the use of the refiner is optional, they found that the quality of images were significantly improved, especially for detailed background and human faces.
+
+
+[[Back to top]](#)
+
 ## 4. [Midjourney](https://www.midjourney.com/)
 
 Midjourney is another popular image generation model favored by the community. However Midjourney is closed source, meaning we don't know the exact architecture and we can't finetune it for our own purposes. Though there are some [hints](https://twitter.com/EMostaque/status/1561917541743841280) that it runs on a variant of Stable Diffusion. Midjourney excels at more "aesthetically pleasing" generations compared to Stable Diffusion and DALL-E. However this sometimes results in the model ignoring parts of your prompt to make things look pretty.
