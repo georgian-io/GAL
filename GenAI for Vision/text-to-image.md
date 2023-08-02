@@ -129,17 +129,24 @@ Textual inversion is an interesting technique that arose as a way to achieve ver
 
 Textual inversion can be used for a number of different applications.  The obvious one is of course text-guided generation of images but this technique can also be used for style transfer and even bias reduction! You can see this in action in the paper or in this [blog post](https://textual-inversion.github.io/).
 
+## 2.4. [Latent Diffusion](https://arxiv.org/abs/2112.10752)
+
+![Latent Diffusion Architecture](images/diffusion_architecture.png)
+Source: [Latent Diffusion paper](https://arxiv.org/abs/2112.10752)
+
+In latent diffusion, instead of working in the pixel space, we work in a latent space (via an autoencoder). This is helpful in speeding up the process. Instead of working on a gigantic 512x512 pixel space, we can compress that into a much smaller latent space and get very similar results.
+
+This works exactly the same way as the diffusion process described above but with an additional step. In the forward diffusion step, the image is encoded into the latent space and the noise is also sampled from the latent space. In the image generation step, the generation process happens entirely in the latent space and there is a final step to decode it back into the RGB space.
+
+This is the basis for most of the models we cover later in this document. The diagram above illustrates this process.
+
 [[Back to top]](#)
 
 ## 3. [Stable Diffusion](https://stability.ai/stablediffusion)
 
-StableDiffusion is perhaps the most popular image generation model today for a simple reason - it's fully open source. You can create, deploy and productize your own version of the model! There's plenty of models online for you to play around with and several communities focused on it. It's normally pretty good at most types of art and can be specialized to a particular art style by just finetuning an existing model (or training your own!). 
+Stable Diffusion is a latent diffusion model. It is perhaps the most popular image generation model today for a simple reason - it's fully open source. You can create, deploy and productize your own version of the model! There's plenty of models online for you to play around with and several communities focused on it. It's normally pretty good at most types of art and can be specialized to a particular art style by just finetuning an existing model (or training your own!). 
 
-Like many of these models, there are several different versions of Stable Diffusion. We focus on some of the main distinctions. First, Stable Diffusion doesn't work directly in the pixel space for the diffusion process. Instead, it works on a latent space via an autoencoder. This is helpful in speeding up the process. Instead of working on a gigantic 512x512 pixel space, we can compress that into a much smaller latent space and get very similar results.
-
-This works exactly the same way as the diffusion process described above but with an additional step. For instance, in the forward diffusion step the image is encoded into the latent space and the noise is also sampled from the latent space. In the image generation step, the generation process happens entirely in the latent space and there is a final step to decode it back into the RGB space.
-
-The model consists of three components:
+Due to its open source nature, there are several different versions of Stable Diffusion. These generally have the same architecture but tend to vary in terms of the data they were trained on. The model consists of three components:
 
 1. Text Encoder:
     * Uses ClipText (GPT-Based)
