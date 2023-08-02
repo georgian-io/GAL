@@ -243,6 +243,8 @@ Thus the Imagen model pipeline consists of:
 * Super-Resolution Diffusion model: Upsamples to 256x256 resolution. This uses their newly introduced Efficient U-Net and has 600M parameters.
 * Super-Resolution model: Upsamples to 1024x1024 resolution. This uses the same model as above but removes some components such as self-attention layers. This has 400M parameters.
 
+As of the time of writing, Imagen does not have full public availability yet. Only their captioning and visual question-answering capabilities are available. You can check the status of this [here](https://cloud.google.com/vertex-ai/docs/generative-ai/image/overview).
+
 [[Back to top]](#)
 
 ## 7. Comparison
