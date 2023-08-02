@@ -30,11 +30,13 @@ In the next section, we first examine the U-Net, which is the model traditionall
 
 5. [DALL-E](#5-DALL-E)
 
-6. [Comparison](#6-comparison)
+6. [Imagen](#6-imagen)
 
-7. [Getting Started](#7-getting-started)
+7. [Comparison](#7-comparison)
 
-8. [Resources](#8-resources)
+8. [Getting Started](#8-getting-started)
+
+9. [Resources](#9-resources)
 
 ## 1. U-Net
 
@@ -226,7 +228,24 @@ Customization: You can create images from prompts, you can mask out parts of an 
 
 [[Back to top]](#)
 
-## 6. Comparison
+## 6. [Imagen](https://arxiv.org/abs/2205.11487)
+
+![Imagen in Action](images/imagen_architecture.png)
+Source: [Imagen paper](https://arxiv.org/abs/2205.11487)
+
+Imagen is a text-to-image diffusion model developed by Google. They use pre-trained large language models to encode text for image synthesis and found that scaling the size of the LLM resulted in better performance versus just scaling the size of the image diffusion model. In addition, they modify the U-Net architecture to introduce the Efficient U-Net. They state that it converges faster and is more memory efficient than the U-Net. Further, they used cascading diffusion models since [previous research](https://cascaded-diffusion.github.io/) found that they are very effective in progressively generating high quality images. They also make several other modifications such as a new benchmark and dynamic thresholding but we'll direct you to the paper linked above for those!
+
+The model is trained on an internal dataset of about 460M image-text pairs along with the publicly available LAION dataset with about 400M pairs.
+
+Thus the Imagen model pipeline consists of:
+* Frozen LLM: Encodes text for conditioning. They found that T5-XXL (11B parameters) worked very well for them.
+* Diffusion Model: Generates a 64x64 image. This is similar to the U-Nets used by the other models above. In total, it came to about 2B parameters.
+* Super-Resolution Diffusion model: Upsamples to 256x256 resolution. This uses their newly introduced Efficient U-Net and has 600M parameters.
+* Super-Resolution model: Upsamples to 1024x1024 resolution. This uses the same model as above but removes some components such as self-attention layers. This has 400M parameters.
+
+[[Back to top]](#)
+
+## 7. Comparison
 
 In short, if you just want to use something quickly without much hassle and don't mind paying a fee to do so, DALL-E is the easiest to use. If you want full control over the data your model uses as well as the training process itself, Stable Diffusion is your best bet. It's also a good choice if you want to keep things completely offline. If you have a scenario where the appearance of the image is more important than the (relative) accuracy, Midjourney is a good choice.
 
@@ -247,7 +266,7 @@ We leave these images with an obligatory disclaimer - none of these prompts were
 
 [[Back to top]](#)
 
-## 7. Getting Started
+## 8. Getting Started
 
 * For StableDiffusion, we have an example notebook setup for you at `examples/text_to_image_stable_diffusion.ipynb` (we've tested this on Colab free, you just need to use a T4 GPU!). If you don't want to go through code at the moment, you could just play around with [StabilityAI's Stable Diffusion XL](https://clipdrop.co/stable-diffusion).
 
@@ -257,10 +276,12 @@ We leave these images with an obligatory disclaimer - none of these prompts were
 
 [[Back to top]](#)
 
-## 8. Resources
+## 9. Resources
 
 * [The Illustrated Stable Diffusion](http://jalammar.github.io/illustrated-stable-diffusion/): A blog post by the excellent Jay Alammar
 
 * [Awesome Generative AI](https://github.com/filipecalegario/awesome-generative-ai): A collection of GenAI resources (including text, audio and video!)
 
 * [The Ultimate Prompting Guide](https://prompthero.com/stable-diffusion-prompt-guide): An informative and easy to follow guide on how to get the most out of text-to-image models.
+
+[[Back to top]](#)
