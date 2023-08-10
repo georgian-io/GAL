@@ -10,8 +10,9 @@ Image-to-text, as the name suggests, is getting a text output given an image inp
 3. [Vision Encoder Decoder Model](#3-vision-encoder-decoder-model)
 4. [CLIP](#4-clip)
 5. [BLIP](#5-blip)
-6. [Getting Started](#6-getting-started)
-7. [Resources](#7-resources)
+6. [BLIP 2](#6-blip-2)
+7. [Getting Started](#7-getting-started)
+8. [Resources](#8-resources)
 
 ## 1. [VisualBERT](https://arxiv.org/pdf/1908.03557.pdf)
 
@@ -26,6 +27,8 @@ The model is usually trained on image+caption data such as [COCO](https://cocoda
 
 You can get the VisualBERT model as well as several fine-tuned checkpoints for specific tasks through [HuggingFace](https://huggingface.co/docs/transformers/model_doc/visual_bert).
 
+[[Back to top]](#)
+
 ## 2. [Vision Transformer](https://arxiv.org/abs/2010.11929)
 
 ![Vision Transformer Architecture](images/vit_architecture.png)
@@ -39,15 +42,21 @@ In terms of performance, the ViT outperforms CNNs only if there is a lot of data
 
 There are several spin-offs of the ViT model such as BEiT (BERT Pre-Training of Image Transformers) which essentially performs self-supervised pre-training instead of supervised pre-training.
 
+[[Back to top]](#)
+
 ## 3. [Vision Encoder Decoder Model](https://huggingface.co/docs/transformers/main/model_doc/vision-encoder-decoder)
 
 The Vision Encoder Decoder Model is a generic framework to create an image-to-text model using any pretrained transformer-based vision model as an encoder and any pretrained language model as the decoder. It is based on Microsoft's [TrOCR](https://arxiv.org/abs/2109.10282) model. Transformer based vision models include ViT and BEiT while the decoder can be something like GPT or BERT. 
 
 This model is interesting because it builds on two different models - one to process image data and the other to process text data. It then simply combines the functionalities of these two models to perform a particular task. For instance, the [vit-gpt2-image-captioning](https://huggingface.co/nlpconnect/vit-gpt2-image-captioning) model uses a ViT encoder and GPT-2 decoder and is trained for image captioning. While not particularly a state of the art model anymore, it does give a good idea of how we can build new models from existing ones.
 
+[[Back to top]](#)
+
 ## 4. [CLIP](https://arxiv.org/abs/2103.00020)
 
 CLIP (Contrastive Language-Image Pre-training) contains both an image and text encoder. It takes as input an image and a caption, encodes them and compares the embeddings using a (cosine) similarity metric. The model is then trained on this similarity task (=1 when the image and caption are related and =0 otherwise). After training for a long while, our encoder reaches a point where the image embedding for a picture of a dog and the text embedding for "a picture of a dog" are very similar. To better train the model, negative samples are also used (sample an image and unrelated caption or vice-versa). We can then give it a phrase and acquire an embedding in the image space that corresponds to that phrase (or vice-versa). This process is known as contrastive learning. The encoders may vary based on the specific model but in general the text encoder is some kind of transformer model and the image encoder is usually a ResNet or a Vision Transformer.
+
+[[Back to top]](#)
 
 ## 5. [BLIP](https://arxiv.org/abs/2201.12086)
 
@@ -68,12 +77,44 @@ All three objectives (ITC, ITM, LM) are optimized during the pre-training proces
 
 [This](https://blog.salesforceairesearch.com/blip-bootstrapping-language-image-pretraining/) blog from the Salesforce teams takes a deeper dive into this model. The BLIP model is a fairly robust model that works well for most vision-language tasks and thus is a good starting point for any work in this area. The model can be used through [HuggingFace](https://huggingface.co/Salesforce/blip-image-captioning-large).
 
-## 6. Getting Started
+[[Back to top]](#)
+
+## 6. [BLIP 2](https://arxiv.org/abs/2301.12597)
+
+![BLIP 2 Architecture](images/blip2_architecture.png)
+
+Source: [BLIP 2 paper](https://arxiv.org/abs/2301.12597)
+
+While one might think that BLIP-2 is just a more advanced version of BLIP's architecture, they actually are quite different. BLIP-2 uses three different components - an image encoder, a Large Language Model and a Querying Transformer (Q-Former). The image encoder and LLM are frozen off-the-shelf models. Specifically, the authors tested ViT-L/14 from CLIP and ViT-g/14 from EVA-CLIP for the image transformer, and a decoder-based LLM (OPT family) as well as an encoder-decoder LLM (Flan-T5 family) for the choice of LLM. These models can presumably be replaced with any other model in the same category. The Q-Former is the only trainable part of BLIP-2 which aims to address the vision-language alignment problem between the embedding space of the frozen image encoder and the frozen LLM. 
+
+The Q-Former consists of two transformer submodules that share the same self-attention layers (architecture below). The first is an image transformer that interacts with the frozen image encoder to extract visual features while the second is a text transformer that functions as both a text encoder and decoder. In addition, a set number of learnable query embeddings are created to act as an input to the image transformer. The Q-Former does not directly interact with the image encoder. Instead, the extracted features are inserted in the cross-attention layers of every other transformer block. The queries interact with each other (and to text data) through self-attention and interact with the image features through the cross-attention layers. The idea is that these query embeddings learn to extract the features of the image that is most relevant to the text. The Q-Former is initialized with a pretrained BERT model's weights (with the cross attention layers being randomly initialized). Training proceeds in a two-phase fashion.
+
+![Q-Former Architecture & Phase 1 Training](images/blip2_phase1.png)
+Source: [BLIP 2 paper](https://arxiv.org/abs/2301.12597)
+
+In the first phase, the image encoder and the Q-Former are trained using image-text pairs. Inspired by BLIP, they use three loss functions - ITC and ITM which were used by BLIP, as well as an Image-grounded Text Generation (ITG) loss function. In ITG, the goal is to generate text (using a causal attention mask) conditioned on an image. This helps to train the query embeddings to extract the most relevant features. 
+
+![Q-Former Architecture & Phase 1 Training](images/blip2_phase2.png)
+Source: [BLIP 2 paper](https://arxiv.org/abs/2301.12597)
+
+In the second phase, the frozen image encoder + Q-Former combo is connected to the frozen LLM. A fully connected layer projects the output query embeddings from the Q-Former into the dimension required by the LLM. These are then prepended to the input of the model. The authors state that these embeddings act as soft visual prompts that condition the LLM on visual representations extracted by the Q-Former. The exact process is slightly different depending on the LLM (decoder only vs encoder-decoder) as seen in the image above. In both cases, some form of the Language Modeling (LM) loss is used.
+
+There are several pre-trained and fine-tuned versions of BLIP 2 available, all of which can be found on [HuggingFace](https://huggingface.co/models?search=salesforce/blip2-).
+
+[[Back to top]](#)
+
+## 7. Getting Started
 
 We have two example notebooks for you to get started with! The first is `im2text_finetuning.ipynb` which walks you through the process of fine-tuning an image-to-text model (BLIP). The second is `im2text_applications.ipynb` which is a quick demo for you to see how image captioning and VQA works.
 
-## 7. Resources
+[[Back to top]](#)
+
+## 8. Resources
 
 * [A Dive into Vision-Language Models](https://huggingface.co/blog/vision_language_pretraining): An informative blog from HuggingFace.
 
 * [BLIP: Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation](https://blog.salesforceairesearch.com/blip-bootstrapping-language-image-pretraining/): A summary of the BLIP model from the Salesforce team.
+
+* [Interactive demo: comparing image captioning models](https://huggingface.co/spaces/nielsr/comparing-captioning-models): A useful tool to compare the results of GIT, BLIP, BLIP-2 and InstructBLIP on the same image.
+
+[[Back to top]](#)
