@@ -1,7 +1,7 @@
 # GenAI for Vision
 
-With the massive hype around LLMs, it might be easy to forget about the amazing things happening over on the vision side of things. Fear not! We'll explore it all here. 
+With the hype around LLMs, it might be easy to forget about everything happening with vision. We'll explore those developments here. 
 
-Now broadly speaking there are two major categories of models to consider. The first is the more hyped up side of text-to-image models. These models do exactly that - converts an input text into an output image. However the usecases for these models is mostly limited to the more creative fields. The second category which is likely to be more of interest is the image-to-text category. This includes usecases like visual question-answering and summarization. In this repository, we cover both sides of this topic. 
+Broadly speaking, there are two major categories of models to consider. The first is text-to-image models. These models do exactly that: convert text input into an image output. However, the use cases for these models are mostly limited to more creative fields. The second category is image-to-text. This includes use cases like visual question-answering and summarization. In this repository, we cover both categories. 
 
-You can visit the `text-to-image.md` and `image-to-text.md` files respectively for more information on the two! You can also find examples from both categories in the `examples` folder.
+You can visit the `text-to-image.md` and `image-to-text.md` files respectively for more information. You can also find examples from both categories in the `examples` folder.
