@@ -18,7 +18,7 @@
 
   <h3 align="center">Georgian AI Library (GAL)</h3>
 
-Welcome to the Georgian AI Library (GAL), the go-to destination for learning about cutting-edge AI research and use cases. Curated by the Georgian AI Team, this repository offers an extensive collection of resources to help you stay ahead of the AI curve and apply innovative solutions to your unique challenges. Dive into each research area to find comprehensive descriptions, links to valuable resources, introductory notebooks, and more. Our goal is to empower you with the knowledge and tools necessary to harness the full potential of AI and elevate your problem-solving capabilities. 
+Welcome to the Georgian AI Library (GAL), where you can learn about cutting-edge AI research and use cases. Curated by the Georgian AI Team, this repository offers a collection of resources to help you stay up to date with AI developments and apply innovative solutions to your challenges. Dive into each research area to find overviews, links to resources, introductory notebooks and more. Our goal is to provide the knowledge and tools necessary to harness AI. 
 
 <!--   <p align="center">
     <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
@@ -47,22 +47,22 @@ Welcome to the Georgian AI Library (GAL), the go-to destination for learning abo
 
 <!-- GETTING STARTED -->
 ## Getting Started
-Each year, our AI team conducts an in-depth analysis of the most significant AI/ML trends, ensuring we remain at the forefront of innovation. By exploring blog posts, research papers, attending industry conferences, and participating in events, we stay well-informed and up-to-date.
+Each year, our AI team conducts an analysis of significant AI/ML trends. By exploring blog posts, research papers, attending industry conferences, and participating in events, we stay well-informed and up-to-date.
 
-Upon identifying these crucial trends, we prioritize and actively delve into each area, focusing on:
+For each trend we follow these steps:
 
-- Conducting comprehensive literature reviews
-- Producing detailed technical briefings
-- Creating introductory notebooks
-- Applying our learnings to real-world use cases in our companies
-- Transforming our knowledge into open-source, reusable assets and toolkits to benefit the broader community
+- Conduct literature reviews.
+- Produce technical briefings.
+- Create introductory notebooks.
+- Apply our learnings to real-world use cases. 
+- Transform our knowledge into open-source, reusable assets and toolkits.
 
-To provide the best support for our customers, we also:
+To further support for our companies, we also:
 
-- Run benchmarks to evaluate the performance of new techniques
-- Develop playbooks to guide users through the ever-evolving AI landscape
+- Run benchmarks to evaluate the performance of new techniques.
+- Develop playbooks to guide users through the evolving AI landscape.
 
-Get a glimpse of our work in this repo, where we share the fruits of our research and exploration, empowering you to harness the full potential of AI.
+In this repo, we share some of the outputs of our research.
 
 
 <!-- ROADMAP -->
@@ -78,9 +78,9 @@ Get a glimpse of our work in this repo, where we share the fruits of our researc
 
 <!-- CONTRIBUTING -->
 ## Contributing
-Contributions are the lifeblood of the open-source community, making it an exceptional place to learn, inspire, and innovate. Your contributions, no matter the size, are immensely appreciated and help drive our collective progress.
+Your contributions, no matter the size, are appreciated.
 
-If you have a suggestion to enhance this project, we encourage you to fork the repo and create a pull request. Alternatively, you can open an issue with the "enhancement" tag. And don't forget to give the project a star to show your support!
+If you have a suggestion to enhance this project, we encourage you to fork the repo and create a pull request. Alternatively, you can open an issue with the "enhancement" tag. 
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
@@ -96,22 +96,6 @@ If you have a suggestion to enhance this project, we encourage you to fork the r
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-<!-- Join Us -->
-## Join Us
-You can also join our technical community, [**Georgian Transferred Learnings**](https://growth.georgian.io/transferred-learnings)! 
-
-Our community consists of 500 machine learning researchers and practitioners from global tech communities and Georgian companies. We hold monthly workshops and presentations on various aspects of machine learning, including LLMs, MLOps, NLP, CV, and more. Our sessions are led by experts from AI labs and companies such as MosaicML, Cohere, HuggingFace, Layer 6, and Google AI and provide a mix of theory and hands-on exercises.
-
-As a member of our community, you'll have the opportunity to network with like-minded individuals, join live discussions in our Slack channel, attend and present in our sessions. The club is open to anyone working on applied AI. To sign up, please fill out [**OUR REGISTRATION FORM**](https://docs.google.com/forms/d/e/1FAIpQLSeAaoOi1UhA-BvbGUgHxvDUpnck5J3R4at6K9-nMhO4KcEpFQ/alreadyresponded).
-
-
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- CONTACT -->
 ## Contact
@@ -119,17 +103,10 @@ If you have any questions or need further assistance, please feel free to reach 
 
 Contacts: 
 - Azin Asgarian: [Email](azin@georgian.io), [Twitter](https://twitter.com/azin_asg), [LinkedIn](https://www.linkedin.com/in/azin-asgarian/?originalSubdomain=ca)
-- TBD
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-TBD
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
