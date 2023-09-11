@@ -181,7 +181,7 @@ Example: In what version of Product_ABC is Feature_XYZ available?
 
 In both of these cases, the information we want might be split across several different documents. Thus we need the IR component to retrieve all these relevant documents (even if some of them don't contain parts of the prompt). 
 
-**Solution**: One option in such a scenario is to simplify the prompts. This could involve us enforcing such a restriction, or we could use an LLM to break it down into individual questions. In essence we try to break the question down into its component parts, retrieve the relevant documents for each component, answer them separately and then combine the two answers. This is similar in nature to the [Plan-and-Execute](https://python.langchain.com/docs/modules/agents/agent_types/plan_and_execute) system popularized by [BabyAGI](https://github.com/yoheinakajima/babyagi).
+**Solution**: One option in such a scenario is to simplify the prompts. This could involve us enforcing such a restriction, or we could use an LLM to break it down into individual questions. In essence we try to break the question down into its component parts, retrieve the relevant documents for each component, answer them separately and then combine the two answers. This is the same as Least-to-Most promting that we cover in `reasoning.md`. When used in an agent, this is similar to the [Plan-and-Execute](https://python.langchain.com/docs/modules/agents/agent_types/plan_and_execute) system popularized by [BabyAGI](https://github.com/yoheinakajima/babyagi).
 
 [[Back to top]](#)
 
