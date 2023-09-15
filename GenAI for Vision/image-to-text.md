@@ -5,14 +5,16 @@ Image-to-text, as the name suggests, is getting a text output given an image inp
 
 ## Table of Contents
 
-1. [VisualBERT](#1-visualbert)
-2. [Vision Transformer](#2-vision-transformer)
-3. [Vision Encoder Decoder Model](#3-vision-encoder-decoder-model)
-4. [CLIP](#4-clip)
-5. [BLIP](#5-blip)
-6. [BLIP 2](#6-blip-2)
-7. [Getting Started](#7-getting-started)
-8. [Resources](#8-resources)
+- [Text-to-Image](#text-to-image)
+  - [Table of Contents](#table-of-contents)
+  - [1. VisualBERT](#1-visualbert)
+  - [2. Vision Transformer](#2-vision-transformer)
+  - [3. Vision Encoder Decoder Model](#3-vision-encoder-decoder-model)
+  - [4. CLIP](#4-clip)
+  - [5. BLIP](#5-blip)
+  - [6. BLIP 2](#6-blip-2)
+  - [7. Getting Started](#7-getting-started)
+  - [8. Resources](#8-resources)
 
 ## 1. [VisualBERT](https://arxiv.org/pdf/1908.03557.pdf)
 
@@ -49,6 +51,8 @@ There are several spin-offs of the ViT model such as BEiT (BERT Pre-Training of 
 The Vision Encoder Decoder Model is a generic framework to create an image-to-text model using any pretrained transformer-based vision model as an encoder and any pretrained language model as the decoder. It is based on Microsoft's [TrOCR](https://arxiv.org/abs/2109.10282) model. Transformer based vision models include ViT and BEiT while the decoder can be something like GPT or BERT. 
 
 This model is interesting because it builds on two different models - one to process image data and the other to process text data. It then simply combines the functionalities of these two models to perform a particular task. For instance, the [vit-gpt2-image-captioning](https://huggingface.co/nlpconnect/vit-gpt2-image-captioning) model uses a ViT encoder and GPT-2 decoder and is trained for image captioning. While not particularly a state of the art model anymore, it does give a good idea of how we can build new models from existing ones.
+
+While this may initially sound confusing, this is actually the same as any other transformer model. At a high level, we take in an input and encode it. Our decoder takes some starting token and attempts to use the embeddings from the encoder through cross attention in order to generate some content. The only real difference here is that instead of using a text-based encoder, we use a vision-based encoder. We still pass the generated embedding to the decoder in the same way (cross attention). The decoder functions as normal with no special changes.
 
 [[Back to top]](#)
 
