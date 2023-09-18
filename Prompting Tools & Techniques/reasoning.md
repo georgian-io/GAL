@@ -23,6 +23,8 @@
 
 LLMs are useful for a variety of tasks. Sometimes though, they need a little nudging in the right direction. Broadly speaking, reasoning refers to a collection of techniques that can perform this nudge. In essence, we want to make the model "think" through things, break a task down into individual steps or explain its own reasoning.
 
+Note: When we say reason or think in this context, we are not referring to the kind of thinking or reasoning that we, as humans, are capable of. This [blog](https://cacm.acm.org/blogs/blog-cacm/276268-can-llms-really-reason-and-plan/fulltext) encapsulates the difference between these two ideas.
+
 # Chain-of-Thought (CoT)
 
 Chain-of-Thought is the most popular approach to making a model think. The idea is to make the model think of the intermediate steps between the input and the output. Consider the following scenario where we ask the model a question:
@@ -77,7 +79,11 @@ Consider the following example:
 
 ![Self-Consistency](images/self_consistency.png)
 
-Here we see that the first model output is flat out wrong. However, if we take the majority vote here, the correct outcome wins out.
+Here we see that the first model output is flat out wrong. However, if we take the majority vote here, the correct outcome wins out. 
+
+In scenarios where we may not have a structured output or otherwise have an answer that isn't easily extractable, self-consistency doesn't work. In these scenarios, one alternative is to use another, more powerful LLM to act as a judge of the outputs. As an example, we could use GPT-3.5 to generate 10 answers and then prompt GPT-4 to judge the best answer.
+
+One caveat with self-consistency is that it is an expensive process. Instead of just making a single call for a prompt, we end up having to make a lot more. This adds up over time, especially when we scale things up. Hence, it may not always be the best choice to use self-consistency. As an alternative many LLMs become effectively deterministic when the temperature is set to 0 (with the exception of GPT-4). This does, however, come at a cost of reduced creativity from the LLM - which may or may not be useful depending on the scenario.
 
 # Knowledge Generation
 
@@ -142,6 +148,7 @@ Source: [Plan-and-Solve Prompting: Improving Zero-Shot Chain-of-Thought Reasonin
 # Resources
 
 * [LangChain: Documentation](https://python.langchain.com/docs/get_started/introduction.html)
+* [ACM: Can LLMs Really Reason and Plan?](https://cacm.acm.org/blogs/blog-cacm/276268-can-llms-really-reason-and-plan/fulltext)
 
 ## References
 
