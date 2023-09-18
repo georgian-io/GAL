@@ -12,6 +12,8 @@
     - [1.2.3. Hybrid Search](#123-hybrid-search)
     - [1.2.4. Embedding Models](#124-embedding-models)
   - [1.3. Text Generation Model:](#13-text-generation-model)
+  - [1.4. RAG in Action](#14-rag-in-action)
+  - [1.5. RAG vs Fine-Tuning](#15-rag-vs-fine-tuning)
 - [2. Indexing Data / Data Ingestion](#2-indexing-data--data-ingestion)
   - [2.1. Determining Chunk Size](#21-determining-chunk-size)
   - [2.2. Chunking Strategies](#22-chunking-strategies)
@@ -93,6 +95,28 @@ In general, we tend to use these models as-is for inference with no special fine
 Originally, the term RAG came from Meta's [RAG model](https://ai.meta.com/blog/retrieval-augmented-generation-streamlining-the-creation-of-intelligent-natural-language-processing-models/). Designed to be a seq2seq model trained simultaneously alongside an embedding model, today RAG is simply the term that refers to the information retrieval component of LLM systems. Nowadays, we just use an LLM instead.
 
 In the case of most systems, you will already have an LLM of choice in mind. This will likely be something like GPT-3.5/4, Claude 2, PaLM 2, or LLaMa 2.
+
+[[Back to top]](#)
+
+## 1.4. RAG in Action
+
+The follow image demonstrates the typical RAG setup using vector databases.
+
+![RAG System](images/rag_system.jpeg)
+
+Source: [AWS: Retrieval Augmented Generation (RAG)](https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-customize-rag.html)
+
+The system receives a prompt and a user query. The user query is sent to the retrieval component which retrieves relevant content. This is appended to the prompt and query and then sent to the LLM to obtain the final answer.
+
+[[Back to top]](#)
+
+## 1.5. RAG vs Fine-Tuning
+
+There has been some confusion on when to use RAG versus something like fine-tuning, especially in the context of allowing LLMs to make use of private data. Before we distinguish the two, let us first recall fine-tuning. Fine-tuning is a technique used to train machine learning models on tasks in order to improve their performance on those tasks. At a high level, it can be thought of as a way to let the model learn new patterns and relationships in the type of data it is being fine-tuned on. 
+
+Fine-tuning is a good approach to use when either the domain of the data or the task in question is new to the model. In these scenarios, fine-tuning can be used to improve model performance. For instance, if you want to improve the performance of tasks like classification, summarization or question-answering, you may consider fine-tuning. Although it is considered to be expensive to run due to the requirement for GPUs, techniques like [PeFT](https://huggingface.co/blog/peft) make it a little easier. In addition, fine-tuning requires labeled data to learn from and in many cases requires access to the model itself, something only open source models offer (though there are exceptions like [GPT-3.5 fine-tuning](https://openai.com/blog/gpt-3-5-turbo-fine-tuning-and-api-updates)).
+
+On the other hand, RAG is useful when the structure or the language used in the data is the same but the content itself may be new to the model. In these cases where it's just a matter of providing the model with the knowledge required to complete a task, RAG is the way to go. RAG is relatively more cost-effective than fine-tuning with extra charges being incurred only for hosting a database. In addition, it can be performed regardless of access to the model and does not require labeled data to train on. RAG can also reduce the risk of hallucination as the LLM can "cite" the information it uses. In addition, RAG is date-invariant. As long as the data store we have is up-to-date, the LLM used does not have to be. 
 
 [[Back to top]](#)
 
@@ -183,7 +207,7 @@ Example: In what version of Product_ABC is Feature_XYZ available?
 
 In both of these cases, the information we want might be split across several different documents. Thus we need the IR component to retrieve all these relevant documents (even if some of them don't contain parts of the prompt). 
 
-**Solution**: One option in such a scenario is to simplify the prompts. This could involve us enforcing such a restriction, or we could use an LLM to break it down into individual questions. In essence we try to break the question down into its component parts, retrieve the relevant documents for each component, answer them separately and then combine the two answers. This is the same as Least-to-Most promting that we cover in `reasoning.md`. When used in an agent, this is similar to the [Plan-and-Execute](https://python.langchain.com/docs/modules/agents/agent_types/plan_and_execute) system popularized by [BabyAGI](https://github.com/yoheinakajima/babyagi).
+**Solution**: One option in such a scenario is to simplify the prompts. This could involve us enforcing such a restriction, or we could use an LLM to break it down into individual questions. In essence we try to break the question down into its component parts, retrieve the relevant documents for each component, answer them separately and then combine the two answers. This is the same as Least-to-Most prompting that we cover in `reasoning.md`. When used in an agent, this is similar to the [Plan-and-Execute](https://python.langchain.com/docs/modules/agents/agent_types/plan_and_execute) system popularized by [BabyAGI](https://github.com/yoheinakajima/babyagi).
 
 [[Back to top]](#)
 
