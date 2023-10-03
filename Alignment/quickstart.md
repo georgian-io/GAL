@@ -4,6 +4,10 @@ This is a short guide on how to quickly get started training your own RLHF model
 
 For this tutorial, we use Microsoft's DeepSpeed library to train our model, we use OPT-1.3B as our LLM, and we use OPT-350M as our reward model. If you wish to use a different model,  please refer to [this page](https://github.com/microsoft/DeepSpeedExamples/tree/master/applications/DeepSpeed-Chat#-supported-models-) to see models officially supported by DeepSpeed. 
 
+Important Note: The contents of this document were tested a few months ago. As of this writing (October 2nd), DeepSpeed now supports using LLaMa 2 instead. Sample code can be found [here](https://github.com/microsoft/DeepSpeedExamples/tree/master/applications/DeepSpeed-Chat/training).
+
+If you use GCP, you can follow this [tutorial](https://github.com/GoogleCloudPlatform/vertex-ai-samples/blob/main/notebooks/official/generative_ai/rlhf_tune_llm.ipynb) instead.
+
 ## Instructions:
 
 1. Install Microsoft DeepSpeed and DeepSpeedExamples:
