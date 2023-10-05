@@ -1,6 +1,12 @@
+# Alignment
+
+LLMs are trained on an enormous amount of data that generally includes the internet. This means that it is going to exhibit behaviors that it sees in the data. Unfortunately, the internet as a whole is not the greatest example of "good" behavior. Thus, having a method to guide the LLM to generate outputs in a helpful, honest, and harmless manner is important. Alignment is this process of "aligning" the LLM to human standards. While the specific definition of human standards may vary, in general, it refers to a combination of helpfulness (assist users), honesty (do not make up things/use only truthful information), and harmlessness (do not be offensive or discriminatory). 
+
+This is understandably a hard task. Even if we were to find a dataset of human behavior and finetune a model on it, there's no guarantee that the model can achieve our criteria. For instance, lets say we have two responses to a given prompt. Both might be technically true but one uses discriminatory language while the other doesn't. How can we help the model learn the reason one prompt is preferred over the other? This is where alignment methods such as RLHF come in.
+
 # Reinforcement Learning from Human Feedback (RLHF)
 
-RLHF is one of the hottest topics of 2023 with several Large Language Models (LLMs) including OpenAI's ChatGPT, Anthropic's Claude and DeepMind's Sparrow utilizing it. It consists of three steps that combine supervised training and reinforcement learning. 
+RLHF is a method of finetuning LLMs that has grown into recent popularity with several Large Language Models (LLMs) including OpenAI's ChatGPT, Anthropic's Claude and DeepMind's Sparrow utilizing some variation of it. It consists of three steps that combine supervised training and reinforcement learning. 
 
 ![RLHF Overview diagram from OpenAI's ChatGPT blogpost](images/ChatGPT_Diagram.svg "RLHF Overview")
 RLHF Overview from OpenAI's [ChatGPT blogpost.](https://openai.com/blog/chatgpt)
@@ -26,6 +32,24 @@ Note: In reality, we may have several outputs for every given prompt but only sa
 Note: This step is often just referred to as step 3 since the overall technique is called RLHF. 
 
 The third step utilizes reinforcement learning to train the model from step 1 (sometimes called the policy or actor model) via reinforcement learning. Specifically, this uses the Proximal Policy Optimization (PPO) algorithm. A rollout consists of sampling a random prompt and generating an output using the policy model. The reward is then calculated using the reward model. The policy model is then updated using this reward via the PPO algorithm.
+
+## LLaMa 2 RLHF
+
+LLaMa 2 introduced some [changes](https://arxiv.org/abs/2307.09288) to the RLHF paradigm. Specifically, they used multiple reward models each offering a reward for different criteria - namely safety and helpfulness. The final reward function is simply a linear combination of these reward models. 
+
+In addition, the data is annotated differently than OpenAI's approach. Instead of ranking a bunch of respones and then picking two of them at each training step, only two responses are annotated for each prompt. However, there is also an extra "margin" label that ranges from "significantly better" to "negligibly better". This can then be used during the training step as a "margin loss". 
+
+Finally, LLaMa 2 uses something known as rejection sampling. In rejection sampling, K outputs are sampled from the model and the output with the highest reward is chosen. In step 3 of RLHF, they train 5 successive versions (with a new batch of preference data used for each model) of the RLHF model. The first 4 exclusively use rejection sampling and in the final model, they use a combination of rejection sampling and PPO. Authors state that rejection sampling acts as a breadth search due to multiple sampling while PPO acts as depth search. 
+
+# Reinforcement Learning from AI Feedback (RLAIF)
+
+RLAIF is nearly identical to RLHF except it replaces human feedback with AI feedback. Here AI feedback refers to a model, usually some kind of LLM like GPT-4, providing the feedback. The input to this LLM is structured such that there's a preamble detailing the task and instructions, few-shot examples, a sample to annotate and an ending string to prompt the LLM ("Preferred Answer = ").
+
+Sometimes, the preamble can be a lot more detailed and act as a "constitution". This is essentially a set of principles defined in natural language for the LLM to follow while providing feedback. We can thus describe the qualities of desirable outputs to the LLM in order to make it more helpful and harmless. There are also scenarios where both options offered to the model may contain undesirable properties. If this is likely, one action that can be taken is to generate revisions. In essence, we clean the dataset using the AI Feedback model.
+
+# Other Alignment Methods
+
+Alignment is a fairly recent topic with several methods exploring it in parallel. While this document covers some of the popular approaches, there are others worth looking into. For instance, [Rank Response to align Human Feedback (RRHF)](https://github.com/GanjinZero/RRHF) and [Direct Preference Optimization (DPO)](https://arxiv.org/abs/2305.18290) both claim comparable or better performance to RLHF-based models with simpler training paradigms.
 
 # Frequently Asked Questions
 
@@ -77,7 +101,7 @@ The third step utilizes reinforcement learning to train the model from step 1 (s
 
 * What is the smallest working model that we can train on readily available GPUs like a T4 used in Colab Free?
 
-  Although we haven't been able to train an LLM on a T4 like in Google Colab, we found that we could train a 7B parameter model at a relatively low cost (~$17). You can find more details about this in the `quickstart.md` documented located in this repository.
+  Although we haven't been able to train an LLM on a T4 like in Google Colab, we found that we could train a 7B parameter model at a relatively low cost (~$17). You can find more details about this in the `rlhf_quickstart.md` documented located in this repository.
 
 # Open Questions
 
@@ -93,3 +117,8 @@ This section consists of interesting questions that we don't yet have an answer 
 * [Microsoft DeepSpeed](https://github.com/microsoft/DeepSpeed/tree/master/blogs/deepspeed-chat): DeepSpeed is a deep learning optimization library. It also offers a relatively easy way to get started with RLHF.
 * [Hugging Face's StackLLaMa](https://huggingface.co/blog/stackllama): An instructive blog post on training LLaMA with RLHF.
 * [Rank Response to align Human Feedback (RRHF)](https://github.com/GanjinZero/RRHF): This is an alternative to RLHF that is in active development. They claim comparable performance to RLHF-based models with a simpler training paradigm.
+* [RLAIF: Scaling Reinforcement Learning from Human Feedback with AI Feedback](https://arxiv.org/abs/2309.00267): Compares RLAIF vs RLHG empirically.
+* [Constitutional AI: Harmlessness from AI Feedback](https://arxiv.org/abs/2212.08073): Introduces the idea of constitutional AI
+* [LLM Training: RLHF and Its Alternatives](https://magazine.sebastianraschka.com/p/llm-training-rlhf-and-its-alternatives): A comprehensive blog post exploring RLHF in-depth.
+* [Llama 2: Open Foundation and Fine-Tuned Chat Models](https://arxiv.org/abs/2307.09288): The LLaMa 2 paper.
+* [Direct Preference Optimization: Your Language Model is Secretly a Reward Model](https://arxiv.org/abs/2305.18290): Another alternative to RLHF.
