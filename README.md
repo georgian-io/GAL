@@ -18,7 +18,7 @@
 
   <h3 align="center">Georgian AI Library (GAL)</h3>
 
-Welcome to the Georgian AI Library (GAL), where you can learn about cutting-edge AI research and use cases. Curated by the Georgian AI Team, this repository offers a collection of resources to help you stay up to date with AI developments and apply innovative solutions to your challenges. Dive into each research area to find overviews, links to resources, introductory notebooks and more. Our goal is to provide the knowledge and tools necessary to harness AI. 
+Welcome to the Georgian AI Library (GAL), where you can learn about AI research and use cases. Curated by the Georgian AI Team, this repository offers a collection of resources to help you stay up to date with AI developments and apply innovative solutions to your challenges. Dive into each research area to find overviews, links to resources, introductory notebooks and more. Our goal is to provide the knowledge and tools necessary to harness AI. 
 
 <!--   <p align="center">
     <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
@@ -47,7 +47,7 @@ Welcome to the Georgian AI Library (GAL), where you can learn about cutting-edge
 
 <!-- GETTING STARTED -->
 ## Getting Started
-Each year, our AI team conducts an analysis of significant AI/ML trends. By exploring blog posts, research papers, attending industry conferences, and participating in events, we stay well-informed and up-to-date.
+Each year, our AI team conducts an analysis of significant AI/ML trends. By exploring blog posts, research papers, attending industry conferences and participating in events, we aim to stay informed and up-to-date.
 
 For each trend we follow these steps:
 
@@ -55,12 +55,12 @@ For each trend we follow these steps:
 - Produce technical briefings.
 - Create introductory notebooks.
 - Apply our learnings to real-world use cases. 
-- Transform our knowledge into open-source, reusable assets and toolkits.
+- Produce open-source, reusable assets and toolkits.
 
-To further support for our companies, we also:
+We also:
 
-- Run benchmarks to evaluate the performance of new techniques.
-- Develop playbooks to guide users through the evolving AI landscape.
+- Run benchmarks that aim to evaluate the performance of new techniques.
+- Develop playbooks to help users through the evolving AI landscape.
 
 In this repo, we share some of the outputs of our research.
 
@@ -80,7 +80,7 @@ In this repo, we share some of the outputs of our research.
 ## Contributing
 Your contributions, no matter the size, are appreciated.
 
-If you have a suggestion to enhance this project, we encourage you to fork the repo and create a pull request. Alternatively, you can open an issue with the "enhancement" tag. 
+If you have a suggestion to enhance this project, fork the repo and create a pull request. Alternatively, you can open an issue with the "enhancement" tag. 
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
