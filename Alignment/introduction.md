@@ -1,19 +1,19 @@
 # Alignment
 
-LLMs are trained on an enormous amount of data that generally includes the internet. This means that it is going to exhibit behaviors that it sees in the data. Unfortunately, the internet as a whole is not the greatest example of "good" behavior. Thus, having a method to guide the LLM to generate outputs in a helpful, honest, and harmless manner is important. Alignment is this process of "aligning" the LLM to human standards. While the specific definition of human standards may vary, in general, it refers to a combination of helpfulness (assist users), honesty (do not make up things/use only truthful information), and harmlessness (do not be offensive or discriminatory). 
+Large language models (LLMs) are often trained on large amounts of data that generally includes information from the internet. This training process means that LLMs may exhibit behaviors that they see in the data. Unfortunately, the internet as a whole is not the greatest example of "good" behavior. Thus, having a method to guide the LLM to generate outputs in a [helpful, honest and harmless manner](https://arxiv.org/abs/2204.05862) can be important. Alignment is this process of "aligning" the LLM to human standards. In general, human standards refers to a combination of helpfulness (assist users), honesty (do not make up things/use only truthful information) and harmlessness (do not be offensive or discriminatory). This is called the [HHH Framework](https://www-files.anthropic.com/production/images/Model-Card-Claude-2.pdf).
 
-This is understandably a hard task. Even if we were to find a dataset of human behavior and finetune a model on it, there's no guarantee that the model can achieve our criteria. For instance, lets say we have two responses to a given prompt. Both might be technically true but one uses discriminatory language while the other doesn't. How can we help the model learn the reason one prompt is preferred over the other? This is where alignment methods such as RLHF come in.
+Alignment can be a challenging task. Even if we were to find a dataset of human behavior and fine tune a model on it, there's no guarantee that the model can achieve our criteria. For instance, let’s say we have two responses to a given prompt. Both might be technically true but one uses discriminatory language while the other doesn't. How can we help the model learn the reason one prompt is preferred over the other? This is where alignment methods such as Reinforcement Learning from Human Feedback (RLHF) come in.
 
 # Reinforcement Learning from Human Feedback (RLHF)
 
-RLHF is a method of finetuning LLMs that has grown into recent popularity with several Large Language Models (LLMs) including OpenAI's ChatGPT, Anthropic's Claude and DeepMind's Sparrow utilizing some variation of it. It consists of three steps that combine supervised training and reinforcement learning. 
+RLHF is a method of fine-tuning LLMs that has grown into recent popularity with several Large Language Models (LLMs) including OpenAI's ChatGPT, Anthropic's Claude and DeepMind's Sparrow utilizing some variation of it. It consists of three steps that combine supervised training and reinforcement learning. 
 
-![RLHF Overview diagram from OpenAI's ChatGPT blogpost](images/ChatGPT_Diagram.svg "RLHF Overview")
+![RLHF Overview diagram from OpenAI's ChatGPT blog post](images/ChatGPT_Diagram.svg "RLHF Overview")
 RLHF Overview from OpenAI's [ChatGPT blogpost.](https://openai.com/blog/chatgpt)
 
 ## Step 1: Supervised Fine Tuning (SFT)
 
-This step involves finetuning your LLM on data for some particular task. This task could be something like summarization or question-answering. 
+This step involves fine-tuning the LLM on data for some particular task. This task could include summarization or question-answering. 
 
 ## Step 2: Training a Reward Model (RM)
 
@@ -25,43 +25,43 @@ $loss(r_\theta) = -log (\sigma(r_\theta(x, y_i) - r_\theta(x, y_j)) $
 
 where $r_\theta$ is the model, $x$ is the prompt and $y_i, y_j$ are the higher and lower ranked outputs respectively. 
 
-Note: In reality, we may have several outputs for every given prompt but only sample two of these prompts at a time.
+Note: Practically, we may have several outputs for every given prompt but only sample two of these prompts at a time.
 
 ## Step 3: Reinforcement Learning from Human Feedback (RLHF/Step-3)
 
 Note: This step is often just referred to as step 3 since the overall technique is called RLHF. 
 
-The third step utilizes reinforcement learning to train the model from step 1 (sometimes called the policy or actor model) via reinforcement learning. Specifically, this uses the Proximal Policy Optimization (PPO) algorithm. A rollout consists of sampling a random prompt and generating an output using the policy model. The reward is then calculated using the reward model. The policy model is then updated using this reward via the PPO algorithm.
+The third step utilizes reinforcement learning to train the model from step 1 (sometimes called the policy or actor model) via reinforcement learning. Specifically, this process uses the Proximal Policy Optimization (PPO) algorithm. A rollout consists of sampling a random prompt and generating an output using the policy model. The reward is then calculated using the reward model. The policy model is then updated using this reward via the PPO algorithm.
 
 ## LLaMa 2 RLHF
 
-LLaMa 2 introduced some [changes](https://arxiv.org/abs/2307.09288) to the RLHF paradigm. Specifically, they used multiple reward models each offering a reward for different criteria - namely safety and helpfulness. The final reward function is simply a linear combination of these reward models. 
+LLaMa 2 introduced some [changes](https://arxiv.org/abs/2307.09288) to the RLHF paradigm. Specifically, the authors used multiple reward models each offering a reward for different criteria - namely safety and helpfulness. The final reward function is simply a linear combination of these reward models. 
 
-In addition, the data is annotated differently than OpenAI's approach. Instead of ranking a bunch of respones and then picking two of them at each training step, only two responses are annotated for each prompt. However, there is also an extra "margin" label that ranges from "significantly better" to "negligibly better". This can then be used during the training step as a "margin loss". 
+In addition, the data is annotated differently than OpenAI's approach. Instead of ranking responses and then picking two of them at each training step, only two responses are annotated for each prompt. However, there is also an extra "margin" label that ranges from "significantly better" to "negligibly better". This margin label can then be used during the training step as a "margin loss". 
 
-Finally, LLaMa 2 uses something known as rejection sampling. In rejection sampling, K outputs are sampled from the model and the output with the highest reward is chosen. In step 3 of RLHF, they train 5 successive versions (with a new batch of preference data used for each model) of the RLHF model. The first 4 exclusively use rejection sampling and in the final model, they use a combination of rejection sampling and PPO. Authors state that rejection sampling acts as a breadth search due to multiple sampling while PPO acts as depth search. 
+Finally, LLaMa 2 uses something known as rejection sampling. In rejection sampling, K outputs are sampled from the model and the output with the highest reward (from the reward model) is chosen. In step 3 of RLHF, they train 5 successive versions (with a new batch of preference data used for each model) of the RLHF model. The first 4 exclusively use rejection sampling and in the final model, they use a combination of rejection sampling and PPO. The authors state that rejection sampling acts as a breadth search due to multiple sampling while PPO acts as depth search. 
 
 # Reinforcement Learning from AI Feedback (RLAIF)
 
-RLAIF is nearly identical to RLHF except it replaces human feedback with AI feedback. Here AI feedback refers to a model, usually some kind of LLM like GPT-4, providing the feedback. The input to this LLM is structured such that there's a preamble detailing the task and instructions, few-shot examples, a sample to annotate and an ending string to prompt the LLM ("Preferred Answer = ").
+RLAIF is similar to RLHF except that it replaces human feedback with AI feedback. Here AI feedback refers to a model, usually some kind of LLM, providing the feedback. The input to this feedback-providing LLM is structured such that there's a preamble detailing the task and instructions, few-shot (solved examples of similar tasks) examples, a sample to annotate and an ending string to prompt the LLM ("Preferred Answer = ").
 
-Sometimes, the preamble can be a lot more detailed and act as a "constitution". This is essentially a set of principles defined in natural language for the LLM to follow while providing feedback. We can thus describe the qualities of desirable outputs to the LLM in order to make it more helpful and harmless. There are also scenarios where both options offered to the model may contain undesirable properties. If this is likely, one action that can be taken is to generate revisions. In essence, we clean the dataset using the AI Feedback model.
+Sometimes, the preamble can be more detailed and act as a "constitution". The constitution acts as a set of principles defined in natural language for the LLM to follow while providing feedback. We can thus describe the qualities of desirable outputs to the LLM in order to make it more helpful and harmless. In scenarios where all the answers offered to the reward model contain undesirable properties, a dataset cleaning process can be undertaken. In this process, the LLM generates revisions of a given answer while the AI Feedback model determines if there are undesirable qualities to the generated revision. When undesirable properties are identified, the AI Feedback model provides feedback to the LLM on why the revision was rejected.
 
 # Other Alignment Methods
 
-Alignment is a fairly recent topic with several methods exploring it in parallel. While this document covers some of the popular approaches, there are others worth looking into. For instance, [Rank Response to align Human Feedback (RRHF)](https://github.com/GanjinZero/RRHF) and [Direct Preference Optimization (DPO)](https://arxiv.org/abs/2305.18290) both claim comparable or better performance to RLHF-based models with simpler training paradigms.
+Alignment is a fairly recent topic. While this document covers some approaches, there may be others worth looking into. For instance, [Rank Response to align Human Feedback (RRHF)](https://github.com/GanjinZero/RRHF) and [Direct Preference Optimization (DPO)](https://arxiv.org/abs/2305.18290) both claim comparable performance to RLHF-based models with simpler training paradigms.
 
 # Frequently Asked Questions
 
-* How is the first step (SFT) different from just finetuning a model like BERT?
+* How is the first step (SFT) different from just fine-tuning a model like BERT?
   
-  It isn't! The first step is the same as finetuning older LLMs such as BERT. 
+  It isn't. The first step is the same as fine-tuning older LLMs such as BERT. 
 
-* Why do we train a reward model and perform reinforcement learning? Why not just use the human preferences to directly train the LLM?
+* Why train a reward model and perform reinforcement learning? Why not just use the human preferences to directly train the LLM?
 
-   There are a number of reasons for this. First is that of data. In a finetuning setting, we would be restricted to only samples that human have annotated. Using a reward model on the other hand allows us to obtain human-like preferences for unseen data as well. This means that we have a significantly larger pool of data to work with.
+  We train a reward model because it allows us to obtain human-life preferences for data the model has not seen before. This gives us a larger pool of data with which we can train the LLM. 
 
-   The second reason is that we don't want to just train the model to give us any output. We want it to give us good outputs. For most of the tasks that use RLHF, there is no one right answer and there is no one wrong answer. Since there are so many different ways of answering a given question, using supervised finetuning which emphasizes one answer above all the others does not help as much as reinforcement learning which rewards all good answers.
+  For most tasks that use RLHF, there is usually no singular right or wrong answer. Since there are different ways of answering a given question, using supervised fine-tuning which emphasizes one answer above others does not help as much as reinforcement learning which rewards all good answers.
 
 * Manually having annotators rank outputs is both expensive and time-consuming. What are my alternatives?
 
@@ -75,7 +75,7 @@ Alignment is a fairly recent topic with several methods exploring it in parallel
 
   Appendix B of the [InstructGPT paper](https://arxiv.org/abs/2203.02155) goes into detail on how OpenAI approached this problem.
 
-* Since SFT is similar to finetuning older LLMs, it is likely that data already exists. However, not a lot of datasets exist for training the reward model. If a company wanted to setup their own LLM on a custom dataset, how much labeled data would they require to train a reward model?
+* Since SFT is similar to fine-tuning older LLMs, it is likely that data already exists. However, not a lot of datasets exist for training the reward model. If a company wanted to setup their own LLM on a custom dataset, how much labeled data would they require to train a reward model?
 
   [InstructGPT (section A.3)](https://arxiv.org/abs/2203.02155) uses around 50k prompts in total. Considering that each of these have anywhere from 4 to 9 responses, the number of training data points (tuples of prompt, winning response, losing response) is in the order of anywhere from a few 100k to almost 2M!
 

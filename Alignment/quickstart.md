@@ -81,8 +81,8 @@ FAQ:
 
 * Can I use a different model instead of the opt models you've used?
 
-    Yes! DeepSpeed supports a number of different models which are listed [here.](https://github.com/microsoft/DeepSpeedExamples/tree/master/applications/DeepSpeed-Chat#-supported-models-) Note that some models may not fit on to a standard GPU out of the box. In such cases you might need to use multi-GPU instances or even multiple nodes. Please refer to the scripts available in the appropriate folder inside the `training_scripts` folder for each step located in `DeepSpeedExamples/applications/DeepSpeed-Chat/training`.
+Typically, yes. DeepSpeed supports a number of different models, which are listed [here.](https://github.com/microsoft/DeepSpeedExamples/tree/master/applications/DeepSpeed-Chat#-supported-models-) Note that some models may not fit on to a standard GPU out of the box. In such cases you might need to use multi-GPU instances or even multiple nodes. Please refer to the scripts available in the appropriate folder inside the `training_scripts` folder for each step located in `DeepSpeedExamples/applications/DeepSpeed-Chat/training`.
 
-* My chatbot keeps repeating the same few words in its responses! How do I fix this?
+* My chatbot keeps repeating the same few words in its responses. How do I fix this?
 
-    This is an issue we have encountered as well. This seems to be a relatively common issue in smaller models. We've found that passing the `no_repeat_ngram_size=5` parameter to the generation call fixes this issue.
+    A repeating chatbot seems to be a relatively common issue in smaller models. We've found that passing the `no_repeat_ngram_size=5` parameter to the generation call may fix this issue.
