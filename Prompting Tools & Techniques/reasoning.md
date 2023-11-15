@@ -12,6 +12,7 @@
 - [Self-Consistency](#self-consistency)
 - [Knowledge Generation](#knowledge-generation)
 - [Least-to-Most Prompting](#least-to-most-prompting)
+- [Step-Back Prompting](#step-back-prompting)
 - [Agents](#agents)
   - [Tool Use](#tool-use)
   - [ReAct](#react)
@@ -106,6 +107,16 @@ Least-to-Most prompting is a way to get the model to break down tasks into a set
 Source: [Least-to-Most Prompting Enables Complex Reasoning in Large Language Models](https://arxiv.org/abs/2205.10625)
 
 Generally, least-to-Most prompting can work well but may run into problems with context size due to the addition of each subtask to the prompt. These problems may be more likely  when the initial prompt is large or if there are a lot of subtasks. One alternative to this method is to use agents, that is, LLMs that can make use of reasoning and tools. 
+
+# [Step-Back Prompting](https://arxiv.org/abs/2310.06117)
+
+Step-Back prompting involves "taking a step back" when faced with a task. In essence, when given a question that may contain a lot of details, we take a step back and distill it into a higher level abstraction that encompasses the original question. For instance, given a question about the school some one went to in a particular time span, we can distill it into a more abstract "education history". We can then use the model's response to this question to ground the answer it provides (by passing it as context) to the original question.
+
+![Step-Back Prompting](images/step_back.png)
+
+Source: [Take a Step Back: Evoking Reasoning via Abstraction in Large Language Models](https://arxiv.org/abs/2310.06117)
+
+As the example above demonstrates, step-back prompting can sometimes succeed where regular CoT fails. By explicitly asking the model to take a step back and answer a more fundamental question, we can equip it with the means of solving the task at hand.
 
 # Agents
 
