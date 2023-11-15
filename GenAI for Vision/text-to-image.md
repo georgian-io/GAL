@@ -11,32 +11,25 @@ In the next section, we first examine the U-Net, which is the model traditionall
 
 ## Table of Contents
 
-1. [U-Net](#1-u-net)
-2. [Diffusion](#2-diffusion)
-
-    2.1. [Adding Control (Context)](#21-adding-control-context)
-
-    2.1.1. [Context Vector](#211-context-vector)
-
-    2.1.2. [CLIP](#212-clip)
-    
-    2.2. [DDIM](#22-denoising-diffusion-implicit-models)
-
-    2.3. [Textual Inversion](#23-textual-inversion)
-
-3. [Stable Diffusion](#3-stable-diffusion)
-
-4. [Midjourney](#4-Midjourney)
-
-5. [DALL-E](#5-DALL-E)
-
-6. [Imagen](#6-imagen)
-
-7. [Comparison](#7-comparison)
-
-8. [Getting Started](#8-getting-started)
-
-9. [Resources](#9-resources)
+- [Text-to-Image](#text-to-image)
+  - [Table of Contents](#table-of-contents)
+  - [1. U-Net](#1-u-net)
+  - [2. Diffusion](#2-diffusion)
+    - [2.1. Adding Control (Context)](#21-adding-control-context)
+    - [2.1.1. Context Vector](#211-context-vector)
+    - [2.1.2. CLIP](#212-clip)
+    - [2.2. Denoising Diffusion Implicit Models](#22-denoising-diffusion-implicit-models)
+  - [2.3. Textual Inversion](#23-textual-inversion)
+  - [2.4. Latent Diffusion](#24-latent-diffusion)
+  - [3. Stable Diffusion](#3-stable-diffusion)
+  - [3.1. Stable Diffusion XL](#31-stable-diffusion-xl)
+  - [4. Midjourney](#4-midjourney)
+  - [5. DALL-E](#5-dall-e)
+    - [5.1. DALL-E 3](#51-dall-e-3)
+  - [6. Imagen](#6-imagen)
+  - [7. Comparison](#7-comparison)
+  - [8. Getting Started](#8-getting-started)
+  - [9. Resources](#9-resources)
 
 ## 1. U-Net
 
@@ -225,6 +218,18 @@ Getting images from DALL-E is as simple as making calls to OpenAI's [API](https:
 
 Customization: You can create images from prompts, you can mask out parts of an image and ask it to inpaint it and you can ask for variations of a given image. You can also choose between generating 256x256, 512x512 and 1024x1024 images.
 
+### 5.1. [DALL-E 3](https://openai.com/dall-e-3)
+
+DALL-E 3 is an improved vision model released by OpenAI in late 2023. Although there is little public information on the specific training and implementation process of this model, there is an indepth explanation of it's improved prompt-following abilities in [this paper](https://cdn.openai.com/papers/dall-e-3.pdf). 
+
+The captions used for training DALL-E 2 consisted primarily of alt text. These are usually created by human authors and are simple descriptions that may not contain details like the presence or positions of objects in the image, text displayed, common sense details like the colors and sizes of the object etc. In some cases, this information could even be incorrect. Instead of using these, the authors opted for synthetic captions.
+
+![DALL-E 3 Recaptioning](images/dalle3_recaptioning.png)
+
+The Short Synthetic Captions (SSC) were generated using an image captioning model. The authors trained a language model alongside a pretrained CLIP model to caption images. They used a small dataset of captions that described only the main subject of the image. The authors then finetuned the captioning model on a small handcrafted dataset of long, highly-descriptive captions - Descriptive Synthetic Captions (DSC). These captions described the main subject alongside the surroundings, background, colors, text etc. They then used this trained image captioner to caption every image in their DALL-E training data. They empirically found that using 95% synthetic captions and 5% ground truth captions always improved the model's performance. 
+
+The authors also acknowledge several limitations with the model. Namely, spatial awareness is still not perfect and the model may have issues with terms like "to the left of" or "behind". Another limitation is that while the model can generate text inside images, this is not always reliable. The model also some times has issues with specificity - it might ignore information in the caption and hallucinate something else entirely. 
+
 [[Back to top]](#)
 
 ## 6. [Imagen](https://arxiv.org/abs/2205.11487)
@@ -254,16 +259,19 @@ There are also other options such as Google's [Imagen](https://imagen.research.g
 
 To help understand how these models work a little better, here are some sample generations along with the prompts used. If there are multiple images generated, we picked subjectively. Images were generated on:
 * July 13th 2023 with [Dall-E 2]((https://labs.openai.com/))
+* November 15th 2023 with DALL-E 3 (via API).
 * August 2nd 2023 with [Stable Diffusion XL 1.0](https://clipdrop.co/stable-diffusion). 
 * July 27th 2023 with Midjourney v5.2.
 
-| Prompt | DALL-E 2 | Stable Diffusion | Midjourney |
-|--------|----------|------------------|------------|
-| An apartment building designed like a fridge.             | ![](images/dalle_fridge.png)  | ![](images/sdxl_fridge.jpg) | ![](images/midjourney_fridge.png) |
-| A margherita pizza in a restaurant overlooking the sea.   | ![](images/dalle_pizza.png)   | ![](images/sdxl_pizza.jpg) | ![](images/midjourney_pizza.png) |
-| A man in a suit and top hat walking down a dark alleyway. | ![](images/dalle_alley.png)   | ![](images/sdxl_alley.jpg) | ![](images/midjourney_alley.png) |
+| Prompt | DALL-E 2 | DALL-E 3 | Stable Diffusion | Midjourney |
+|--------|----------|----------|------------------|------------|
+| An apartment building designed like a fridge.             | ![](images/dalle_fridge.png)  | ![](images/dalle3_fridge.png) | ![](images/sdxl_fridge.jpg) | ![](images/midjourney_fridge.png) |
+| A margherita pizza in a restaurant overlooking the sea.   | ![](images/dalle_pizza.png)   | ![](images/dalle3_pizza.png) | ![](images/sdxl_pizza.jpg) | ![](images/midjourney_pizza.png) |
+| A man in a suit and top hat walking down a dark alleyway. | ![](images/dalle_alley.png)   | ![](images/dalle3_alley.png) | ![](images/sdxl_alley.jpg) | ![](images/midjourney_alley.png) |
 
-We leave these images with an obligatory disclaimer - none of these prompts were tuned. You may improve results after tuning these prompts per model. We link to a guide to this in the resources section below.
+We leave these images with an obligatory disclaimer - none of these prompts were tuned*. You may improve results after tuning these prompts per model. We link to a guide to this in the resources section below.
+
+*Note: DALL-E 3 implicitly does prompt tuning by getting GPT to revise prompts sent to it.
 
 [[Back to top]](#)
 
