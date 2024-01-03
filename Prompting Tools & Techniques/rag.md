@@ -1,5 +1,7 @@
 # Information Retrieval / Retrieval Augmented Generation (RAG):
 
+Last Updated: 3rd Jan 2024
+
 ## Table of Contents
 - [Information Retrieval / Retrieval Augmented Generation (RAG):](#information-retrieval--retrieval-augmented-generation-rag)
   - [Table of Contents](#table-of-contents)
@@ -11,7 +13,7 @@
   - [2.3. Chunking](#23-chunking)
   - [2.3.1. Determining Chunk Size](#231-determining-chunk-size)
   - [2.3.2. Chunking Strategies](#232-chunking-strategies)
-- [3. Querying Data / Retrieval:](#3-querying-data--retrieval)
+- [3. Retrieval](#3-retrieval)
   - [3.1. Query Transformation](#31-query-transformation)
     - [3.1.1. Query Expansion](#311-query-expansion)
     - [3.1.2. Query Rewriting](#312-query-rewriting)
@@ -133,7 +135,7 @@ Note: The techniques above are not a comprehensive view of all chunking methods.
 
 [[Back to top]](#)
 
-# 3. Querying Data / Retrieval:
+# 3. Retrieval
 
 Retrieval is the process of acquiring relevant context from the storage given a query from the user. As a reminder, this works through the following steps:
 
@@ -208,7 +210,7 @@ Answer the following question: {user_query}
 Solution: 
 ```
 
-Ideally, this step should include instructions to the model, either via a system prompt or in the prompt itself. These instructions should specify any rules the LLM should follow, how it should structure its responses, how to handle certain scenarios etc. 
+Ideally, this step should include instructions to the model, either via a system prompt or in the prompt itself. These instructions should specify any rules the LLM should follow, how it should structure its responses, how to handle certain scenarios etc. In any case, the augmented prompt is then sent to the LLM and the corresponding response can then be sent back to the user.
 
 # 5. Common Issues
 
