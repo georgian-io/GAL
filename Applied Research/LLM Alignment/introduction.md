@@ -2,7 +2,9 @@
 
 Large language models (LLMs) are often trained on large amounts of data that generally includes information from the internet. This training process means that LLMs may exhibit behaviors that they see in the data. Unfortunately, the internet as a whole is not the greatest example of "good" behavior. Thus, having a method to guide the LLM to generate outputs in a [helpful, honest and harmless manner](https://arxiv.org/abs/2204.05862) can be important. Alignment is this process of "aligning" the LLM to human standards. In general, human standards refers to a combination of helpfulness (assist users), honesty (do not make up things/use only truthful information) and harmlessness (do not be offensive or discriminatory). This is called the [HHH Framework](https://www-files.anthropic.com/production/images/Model-Card-Claude-2.pdf).
 
-Alignment can be a challenging task. Even if we were to find a dataset of human behavior and fine tune a model on it, there's no guarantee that the model can achieve our criteria. For instance, let’s say we have two responses to a given prompt. Both might be technically true but one uses discriminatory language while the other doesn't. How can we help the model learn the reason one prompt is preferred over the other? This is where alignment methods such as Reinforcement Learning from Human Feedback (RLHF) come in.
+Alignment can be a challenging task. Even if we were to find a dataset of human behavior and fine tune a model on it, there's no guarantee that the model can achieve our criteria. For instance, let’s say we have two responses to a given prompt. Both might be technically true but one uses discriminatory language while the other doesn't. How can we tell the model that the non-discriminatory version is preferred over the discriminatory version? In other words, how can we use human preferences or feedback to train a model?
+
+We cover a number of methods that explore solutions to this problem. In all cases, a pre-trained LLM is used as a base upon which alignment techniques are used.
 
 # Reinforcement Learning from Human Feedback (RLHF)
 
@@ -13,25 +15,27 @@ RLHF Overview from OpenAI's [ChatGPT blogpost.](https://openai.com/blog/chatgpt)
 
 ## Step 1: Supervised Fine Tuning (SFT)
 
-This step involves fine-tuning the LLM on data for some particular task. This task could include summarization or question-answering. 
+This step involves fine-tuning the LLM on data for some particular task. This is usually dialogue-focused data to better suit conversational AI. This step involves anywhere from 10k-100k (prompt, response) pairs.
 
 ## Step 2: Training a Reward Model (RM)
 
-This step involves training a separate model to rank preferences. Specifically, given a prompt and two outputs, the model outputs a scalar score for each output. It uses a pairwise loss function that takes in the scores for each output along with human labels (the higher ranked output is given a label of 1 while the other gets a label of 0). 
+This step involves training a separate model to rank preferences. Specifically, given a prompt and two outputs, the model outputs a scalar score for each output. 
 
-The loss function is defined as: 
+In order to train this model, human feedback is required. Thus, a large number of prompts are fed in to the model to acquire a number of outputs for each prompt. In some cases, the outputs could be edited or even written by humans. In any case, human labelers rank all the outputs for each prompt. This dataset of prompts alongside a number of ranked outputs is called a comparison dataset. While the specific number of prompts may vary, the number of training data points (prompt, winning_response, losing_response) is usually in the order of 100k to a few million. For instance, [InstructGPT (section A.3)](https://arxiv.org/abs/2203.02155) uses around 50k prompts, each of which have 4-9 responses. 
 
-$loss(r_\theta) = -log (\sigma(r_\theta(x, y_i) - r_\theta(x, y_j)) $
+During the training process, we select a prompt and sample two associated outputs from our dataset. The higher ranked output is given a label of 1 while the other gets a label of 0 (though in some cases, soft labels may be used). The reward model is then trained using a pairwise loss function as defined below: 
+
+$loss(r_\theta) = -log (\sigma(r_\theta(x, y_i) - r_\theta(x, y_j))$
 
 where $r_\theta$ is the model, $x$ is the prompt and $y_i, y_j$ are the higher and lower ranked outputs respectively. 
 
-Note: Practically, we may have several outputs for every given prompt but only sample two of these prompts at a time.
+## Step 3: Reinforcement Learning Fine-Tuning
 
-## Step 3: Reinforcement Learning from Human Feedback (RLHF/Step-3)
+The third step utilizes reinforcement learning to train the model from step 1 (sometimes called the policy or actor model) via a reinforcement learning algorithm called Proximal Policy Optimization (PPO). We do not go into the details of this algorithm as it involves significant knowledge of reinforcement learning. 
 
-Note: This step is often just referred to as step 3 since the overall technique is called RLHF. 
+At a high level, we sample a random prompt and feed it to the policy model (the LLM). This model then generates an output based on the prompt. This output is appended to the initial prompt and is then sent to the reward model, which outputs a preference score. The PPO algorithm then uses this score to update the policy model. This is repeated for a large number of prompts. 
 
-The third step utilizes reinforcement learning to train the model from step 1 (sometimes called the policy or actor model) via reinforcement learning. Specifically, this process uses the Proximal Policy Optimization (PPO) algorithm. A rollout consists of sampling a random prompt and generating an output using the policy model. The reward is then calculated using the reward model. The policy model is then updated using this reward via the PPO algorithm.
+This step requires about 10k-100k prompts. [InstructGPT](https://arxiv.org/abs/2203.02155) uses about 40,000. 
 
 ## LLaMa 2 RLHF
 
@@ -47,21 +51,29 @@ RLAIF is similar to RLHF except that it replaces human feedback with AI feedback
 
 Sometimes, the preamble can be more detailed and act as a "constitution". The constitution acts as a set of principles defined in natural language for the LLM to follow while providing feedback. We can thus describe the qualities of desirable outputs to the LLM in order to make it more helpful and harmless. In scenarios where all the answers offered to the reward model contain undesirable properties, a dataset cleaning process can be undertaken. In this process, the LLM generates revisions of a given answer while the AI Feedback model determines if there are undesirable qualities to the generated revision. When undesirable properties are identified, the AI Feedback model provides feedback to the LLM on why the revision was rejected.
 
+# [Direct Preference Optimization (DPO)](https://arxiv.org/abs/2305.18290)
+
+Direct Preference Optimization (DPO) demonstrated that the RLHF objective can be rewritten as a function of the policy model (the LLM). That is, mathematically, DPO is equivalent to RLHF. Thus DPO can directly define the loss as a function of the policy model. This lets us bypass the reward model and reinforcement learning steps of RLHF and instead directly optimize the language model using preference data (feedback). 
+
+We can think of it as a supervised learning problem where our dataset is of the form (prompt, winning_response, losing_response). Instead of predicting text, we instead compute the probability of the model outputting a particular response. We then substitute these values into the DPO loss function (which is based on binary cross-entropy):
+
+![dpo_loss](images/dpo_loss.png)
+
+where $\pi_\theta$ is the LLM being trained, $\pi_{ref}$ is the reference LLM, $x$ is the prompt, $y_w$ and $y_l$ are the winning and losing responses, and $\beta$ is a hyperparameter.
+
+The reference LLM is a version of the LLM from before the DPO training began that has its parameters frozen. The goal is to ensure that the trained model outputs higher probabilities than the reference model for winning responses and lower probabilities than the response model for losing responses. Thus by taking the ratio of the trained LLM by the reference LLM, we obtain implicit rewards.
+
+$\beta$ is a hyperparameter that controls the strength of the KL-Penalty. The authors used a value of 0.1 for most experiments.
+
+Note: We still perform the SFT step from RLHF and we still need to collect a significant amount of human feedback. DPO only eliminates the reward modeling and reinforcement learning steps from RLHF.
+
 # Other Alignment Methods
 
-Alignment is a fairly recent topic. While this document covers some approaches, there may be others worth looking into. For instance, [Rank Response to align Human Feedback (RRHF)](https://github.com/GanjinZero/RRHF) and [Direct Preference Optimization (DPO)](https://arxiv.org/abs/2305.18290) both claim comparable performance to RLHF-based models with simpler training paradigms.
+Alignment is a fairly recent topic. While this document covers some approaches, there may be others worth looking into. For instance, [Rank Response to align Human Feedback (RRHF)](https://github.com/GanjinZero/RRHF) claims comparable performance to RLHF-based models with simpler training paradigms.
+
+One drawback with both RLHF and DPO is that they require significant amounts of preference data (output A is better than output B). [Kahneman-Tversky Optimization (KTO)](https://github.com/ContextualAI/HALOs/blob/main/assets/report.pdf) is an alignment method, based on theories from behavioral economics, that does not require preferences like those used by RLHF and DPO. Instead, it works with binary feedback - the output is either desirable or undesirable. 
 
 # Frequently Asked Questions
-
-* How is the first step (SFT) different from just fine-tuning a model like BERT?
-  
-  It isn't. The first step is the same as fine-tuning older LLMs such as BERT. 
-
-* Why train a reward model and perform reinforcement learning? Why not just use the human preferences to directly train the LLM?
-
-  We train a reward model because it allows us to obtain human-life preferences for data the model has not seen before. This gives us a larger pool of data with which we can train the LLM. 
-
-  For most tasks that use RLHF, there is usually no singular right or wrong answer. Since there are different ways of answering a given question, using supervised fine-tuning which emphasizes one answer above others does not help as much as reinforcement learning which rewards all good answers.
 
 * Manually having annotators rank outputs is both expensive and time-consuming. What are my alternatives?
 
@@ -75,38 +87,17 @@ Alignment is a fairly recent topic. While this document covers some approaches, 
 
   Appendix B of the [InstructGPT paper](https://arxiv.org/abs/2203.02155) goes into detail on how OpenAI approached this problem.
 
-* Since SFT is similar to fine-tuning older LLMs, it is likely that data already exists. However, not a lot of datasets exist for training the reward model. If a company wanted to setup their own LLM on a custom dataset, how much labeled data would they require to train a reward model?
-
-  [InstructGPT (section A.3)](https://arxiv.org/abs/2203.02155) uses around 50k prompts in total. Considering that each of these have anywhere from 4 to 9 responses, the number of training data points (tuples of prompt, winning response, losing response) is in the order of anywhere from a few 100k to almost 2M!
-
-* How many prompts would we need for step 3?
-
-  InstructGPT uses about 40,000. Based on our research, we believe you would need anything between 10k to 100k prompts.
-
 * How do we validate the human preferences obtained for step 2? If we have 10 different outputs for a prompt, people are likely to rank them in different orders due to their own biases. Thus we can't use a single person's ranking. But how many people do we need for this? Do we use a majority ranking or an average? 
 
   [InstructGPT (section 5.3)](https://arxiv.org/abs/2203.02155) used around 40 labelers but there was rarely any overlap in the comparisons that they labeled. OpenAI acknowledges that this isn't ideal but does note that the labelers tended to agree with each other roughly 70% of the time. They also note that simply taking the average preference doesn't always work. For example when generating text that affects a minority group negatively, that group's preferences should be weighed more heavily.
   
 * How big of a model do we need to get good results?
 
-  From our experience, the specific model and dataset(s) used is more important in determining performance. Consult the [Chatbot Arena Leaderboard](https://lmsys.org/blog/2023-05-25-leaderboard/). We see that in some cases smaller models outperform larger ones (such as Vicuna-7B outperforming Alpaca-13B). This does imply that we could get away with training a 7B parameter model and get good performance. However, note that larger models do tend to do better as seen in GPT, Claude and PaLM.
+  From our experience, the specific model and dataset(s) used is more important in determining performance. Consult the [Chatbot Arena Leaderboard](https://lmsys.org/blog/2023-05-25-leaderboard/) for more insight into model performance. 
 
 * What hyper-parameters make the most impact on the results?
 
-  The folks in charge of DeepSpeed have an [entire document](https://github.com/microsoft/DeepSpeedExamples/blob/master/applications/DeepSpeed-Chat/training/README.md) detailing their study on this topic.
-
-* What is a good number for perplexity/accuracy/reward for each of the steps?
-
-  We found that a perplexity of around 1.8 for step 1, a reward model accuracy of over 60% and an average reward of at least 5 tended to result in a model that worked relatively well in our tests. However, this is by no means a guarantee that your model will work well. According to the [DeepSpeed repository](https://github.com/microsoft/DeepSpeedExamples/blob/master/applications/DeepSpeed-Chat/training/README.md), although the perplexity stabilized within 1-2 epochs, they found that training it for longer (around 16 epochs) resulted in better generation quality.
-
-* What is the smallest working model that we can train on readily available GPUs like a T4 used in Colab Free?
-
-  Although we haven't been able to train an LLM on a T4 like in Google Colab, we found that we could train a 7B parameter model at a relatively low cost (~$17). You can find more details about this in the `rlhf_quickstart.md` documented located in this repository.
-
-# Open Questions
-
-This section consists of interesting questions that we don't yet have an answer to/are in the process of figuring out.
-
+  The folks in charge of DeepSpeed have an [entire document](https://github.com/microsoft/DeepSpeedExamples/blob/master/applications/DeepSpeed-Chat/training/README.md) detailing their study on this topic, although this is specific to RLHF.
 
 # Resources
 
