@@ -26,7 +26,14 @@ cp .env-template .env
 ```
 Add any necessary API keys there following the given format.
 
-5. Start from `notebooks/start_here.ipynb`
+5. `notebooks` contain a step-by-step end-to-end example on a Q&A with RAG.
+The `notebooks` folder has the following parts:
+1. `01-llm-app-setup.ipynb`: Set up the LLM app
+2. `02-dataset-creation.ipynb`:Create evaluation dataset
+3. `03-metrics-definition.ipynb`: Define metrics to use
+4. `04-app-evaluation.ipynb`: Evaluate the app
+5. `05-optional-langsmith.ipynb`: Using LangSmith for tracing and evaluation
+6. `06-optional-langfuse.ipynb`: Using Langfuse for tracing and evaluation
 
 ## Optional: Using LangSmith or Langfuse
 LangSmith and Langfuse are observability tools to help evaluate LLM during development or monitoring during production. LangSmith is a tool provided by LangChain. As of February 22nd, 2024, they provide the first 3000 traces free per month, and each additional trace is $0.005.
@@ -34,6 +41,8 @@ LangSmith and Langfuse are observability tools to help evaluate LLM during devel
 Langfuse is an open-sourced observability tool. You can optionally self-host the solution for free and the code is available on [their github repo](https://github.com/langfuse/langfuse). If you choose to use their managed solution, as of February 22nd, 2024, they allow for the first 50,000 traces free per month.
 
 If you'd like to integrate the evaluation with [LangSmith](https://smith.langchain.com/) or [Langfuse](https://langfuse.com/), please sign up on their platform and get the API keys.
+
+The demo should consume less than a few hundred traces/observations. 
 
 ## Repo Info
 ### Poetry

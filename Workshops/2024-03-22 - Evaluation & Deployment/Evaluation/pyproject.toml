@@ -4,10 +4,6 @@ version = "0.1.0"
 description = "Example code to run LLM evaluation on a use case"
 authors = ["angeliney"]
 
-packages = [
-    { include = "llm_evaluation", from = "src" },
-]
-
 [tool.poetry.dependencies]
 python = ">=3.9,<3.13"
 python-dotenv = "^1.0.0"
