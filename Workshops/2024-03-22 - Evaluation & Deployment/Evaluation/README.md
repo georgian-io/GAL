@@ -15,6 +15,7 @@ conda activate llm-evaluation
 ```
 poetry install
 ```
+
 3. Check installation worked by running 
 ```
 pytest .
@@ -32,13 +33,16 @@ The `notebooks` folder has the following parts:
 2. `02-dataset-creation.ipynb`:Create evaluation dataset
 3. `03-metrics-definition.ipynb`: Define metrics to use
 4. `04-app-evaluation.ipynb`: Evaluate the app
-5. `05-optional-langsmith.ipynb`: Using LangSmith for tracing and evaluation
-6. `06-optional-langfuse.ipynb`: Using Langfuse for tracing and evaluation
+5. `05-optional-langsmith.ipynb`: [Optional] Using LangSmith for tracing and evaluation
+6. `06-optional-langfuse.ipynb`: [Optional] Using Langfuse for tracing and evaluation
+
+## Required: Using an LLM
+We use langchain for all the code in the notebooks. By default we are using an OpenAI model and thus require an OpenAI key. However, you can change the LLM being used and the code should still work. You can refer to the [LangChain documentation](https://python.langchain.com/docs/integrations/llms/). The entire example will cost around $25 with OpenAI.
 
 ## Optional: Using LangSmith or Langfuse
-LangSmith and Langfuse are observability tools to help evaluate LLM during development or monitoring during production. LangSmith is a tool provided by LangChain. As of February 22nd, 2024, they provide the first 3000 traces free per month, and each additional trace is $0.005.
+LangSmith and Langfuse are observability tools to help evaluate LLM during development or monitoring during production. LangSmith is a tool provided by LangChain. As of February 2024, they provide the first 3000 traces free per month, and each additional trace is $0.005.
 
-Langfuse is an open-sourced observability tool. You can optionally self-host the solution for free and the code is available on [their github repo](https://github.com/langfuse/langfuse). If you choose to use their managed solution, as of February 22nd, 2024, they allow for the first 50,000 traces free per month.
+Langfuse is an open-sourced observability tool. You can optionally self-host the solution for free and the code is available on [their github repo](https://github.com/langfuse/langfuse). If you choose to use their managed solution, as of February 2024, they allow for the first 50,000 traces free per month.
 
 If you'd like to integrate the evaluation with [LangSmith](https://smith.langchain.com/) or [Langfuse](https://langfuse.com/), please sign up on their platform and get the API keys.
 
