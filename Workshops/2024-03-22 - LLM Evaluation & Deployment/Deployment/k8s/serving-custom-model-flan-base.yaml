@@ -1,0 +1,46 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flan-t5-base
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flan-t5-base
+  template:
+    metadata:
+      labels:
+        app: flan-t5-base
+    spec:
+      containers:
+        - name: main
+          image: ghcr.io/huggingface/text-generation-inference:1.4.3
+          args: ["--model-id", "google/flan-t5-base", "--num-shard", "1"]
+          ports:
+          - containerPort: 80
+          volumeMounts:
+          - name: shm
+            mountPath: /dev/shm
+          - name: data
+            mountPath: /data
+      volumes:
+      - name: shm
+        emptyDir:
+          sizeLimit: 1Gi
+      - name: data
+        emptyDir:
+          sizeLimit: 10Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flan-t5-base
+  labels:
+    app: flan-t5-base
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    app: flan-t5-base
