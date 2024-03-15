@@ -30,6 +30,7 @@ aws_auth = AWS4Auth(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, REGION, "sagemaker
 
 class SageMakerUser(HttpUser):
     wait_time = between(5, 10)  # Wait time between tasks (1-2 seconds here)
+    host = ""
 
     @task
     def post_inference(self):
