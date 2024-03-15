@@ -29,6 +29,7 @@ def get_random_adapter() -> str:
 
 class TGILoadTest(HttpUser):
     wait_time = between(1, 5)  # Define wait time between tasks (1 to 5 seconds)
+    host = "http://localhost:8080"
 
     @task
     def send_tgi_request(self):

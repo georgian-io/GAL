@@ -1,55 +1,98 @@
-# LLM Inference 
+# Transferred Learnings Workshop - LLM Deployment
 
-# Setup 
+In this stream we'll cover the steps to deploy and serve your proof-of-concept including:
 
-Tools to install: 
+* How to use open-source (Mistral, LLaMa etc.) vs. closed-source (OpenAI, Anthropic etc.) models
+* The basics of serving models using tools and libraries like TGI, vLLM and Triton.
+* Advanced use cases such as multiple LoRAs, asynchronous inference, multimodal models.
+* Deep dive into examples and cost analysis
+
+To participate in the Deployment stream, any trained or fine-tuned model should suffice. 
+
+# Environment Setup & Installation
+
+## Tools you need to install
 
 - [python](https://www.python.org/)
 - [docker](https://docs.docker.com/engine/install/)
-- [aws-cli](https://github.com/aws/aws-cli)
-- [gcloud CLI](https://cloud.google.com/sdk/gcloud)
 - [kind](https://kind.sigs.k8s.io/docs/user/quick-start/)
+  - `brew install kind`
+  - The link above offers installation instructions for other operating systems.
 - [kubectl](https://kubernetes.io/docs/tasks/tools/)
+  - `brew install kubectl`
+  - The link above offers installation instructions for other operating systems.
 - [k9s](https://k9scli.io/topics/install/)
+  - `brew install derailed/k9s/k9s`
+  - The link above offers installation instructions for other operating systems.
+- [Optional] AWS Users: [aws-cli](https://github.com/aws/aws-cli)
+  - `pip install awscli`
+- [Optional] GCP Users: [gcloud CLI](https://cloud.google.com/sdk/docs/install)
+  - Please follow the instructions on the webpage linked above.
 
-Access to have:
+## Services you need access to
 
-- [Huggingface token to read models](https://huggingface.co/docs/hub/en/security-tokens)
-- [AWS SageMaker](https://aws.amazon.com/sagemaker/)
-- [AWS SageMaker Role](https://docs.aws.amazon.com/sagemaker/latest/dg/role-manager.html)
-- [GCP Vertex AI](https://cloud.google.com/vertex-ai?hl=en)
+- [Hugging Face Token](https://huggingface.co/docs/hub/en/security-tokens)
+  - Note: This is a free token you can acquire by creating a Hugging Face account.
+  - Login to your account, go to [this link](https://huggingface.co/settings/tokens), and create a `User Access Token` under the `Access Tokens` option.
+  - Once you have the token, run the following code in the terminal after substituting your token:
+  - ```export HUGGING_FACE_HUB_TOKEN=hf_your_token_here```
+- [Optional] AWS Users:
+  - [AWS SageMaker](https://aws.amazon.com/sagemaker/)
+  - [AWS SageMaker Role](https://docs.aws.amazon.com/sagemaker/latest/dg/role-manager.html)
+- [Optional] GCP Users:
+  - [GCP Vertex AI](https://cloud.google.com/vertex-ai?hl=en)
 
+## Setup your environment
 
+If you use Conda:
+
+```bash
+conda create -n llm-deployment python=3.10
+conda activate llm-deployment
+pip install -r requirements.txt
 ```
-export HUGGING_FACE_HUB_TOKEN=hf_your_token_here
+gi
+If you use pure Python:
+
+```bash
+python -m venv env
+source env/bin/activate
+pip install -r requirements.txt
 ```
 
-## TGI 
+If you have access to AWS Sagemaker, run the following after setting up your environment above. Please note that pip may raise an error about potential incompatibilities, but this can be ignored.
 
-GPU
-
+```bash
+pip install -r aws_requirements.txt
 ```
+
+## Text Generation Interface
+
+### Run on GPU
+
+```bash
 docker run --gpus all --shm-size 1g -p 8080:80 -e HUGGING_FACE_HUB_TOKEN=$HUGGING_FACE_HUB_TOKEN -v $PWD:/data ghcr.io/huggingface/text-generation-inference:1.4.3 --model-id google/gemma-2b
 ```
 
-CPU
+### Run on CPU
 
-```
+```bash
 docker run -it --shm-size 1g -p 8080:80 -e HUGGING_FACE_HUB_TOKEN=$HUGGING_FACE_HUB_TOKEN -v $PWD:/data ghcr.io/huggingface/text-generation-inference:1.4.3 --model-id google/flan-t5-small
 ```
 
-Client 
+### Run the Client 
 
-```
+```bash
 example_input="Generate SQL for this user query: How many heads of the departments are older than 56 ? for next table schema: CREATE TABLE head (age INTEGER)"
 python llm_inference/clients.py tgi-requests-client $example_input --host=http://0.0.0.0:8080
 ```
 
-Benchamark
+### Benchmarking
 
-```
+```bash
 locust -f llm_inference/load_tgi.py
 ```
+Then visit `http://0.0.0.0:8089/` to perform benchmarking.
 
 Reference: 
 
@@ -58,35 +101,33 @@ Reference:
 
 ## Lorax
 
-GPU 
+Remember to generate a Hugging Face token [here](https://huggingface.co/settings/tokens) and run ```export HUGGING_FACE_HUB_TOKEN=hf_your_token_here```
 
-```
+Note: Lorax **requires** an Nvidia GPU (Ampere generation or above) to run.
+
+### Run on GPU 
+
+```bash
 docker run --gpus all --shm-size 1g -p 8080:80 -e HUGGING_FACE_HUB_TOKEN=$HUGGING_FACE_HUB_TOKEN -p 8080:80 -v $PWD:/data ghcr.io/predibase/lorax:latest --model-id google/gemma-2b
 ```
 
-CPU
+### Run the Client 
 
-```
-docker run --shm-size 1g -p 8080:80 -e HUGGING_FACE_HUB_TOKEN=$HUGGING_FACE_HUB_TOKEN -p 8081:80 -v $PWD:/data ghcr.io/predibase/lorax:latest --model-id microsoft/phi-2
-```
-
-Client 
-
-```
+```bash
 example_input="Generate SQL for this user query: How many heads of the departments are older than 56 ? for next table schema: CREATE TABLE head (age INTEGER)"
 python llm_inference/clients.py lorax-requests-client $example_input --host=http://0.0.0.0:8080
 ```
 
-Client with adapted
+### Run the Client with an adapter
 
-```
+```bash
 example_input="Generate SQL for this user query: How many heads of the departments are older than 56 ? for next table schema: CREATE TABLE head (age INTEGER)"
 python llm_inference/clients.py lorax-requests-client $example_input --host=http://0.0.0.0:8080 --adapter-id=Yhyu13/phi-2-sft-alpaca_gpt4_en-ep1-lora
 ```
 
-Benchamark
+### Benchmarking
 
-```
+```bash
 locust -f llm_inference/load_tgi.py
 ```
 
@@ -98,62 +139,85 @@ Reference:
 
 ## K8S
 
-Create cluster 
+### Create a cluster 
 
-```
+```bash
 kind create cluster --name llm-inference 
 ```
 
-Run UI for cluster 
-```
+### Run UI for cluster 
+
+```bash
 k9s -A 
 ```
 
-Deploy endpoint
+### Deploy an endpoint
 
-```
+Pick whichever model you want to use:
+
+```bash
 kubectl create -f ./k8s/serving-custom-model-flan-base.yaml
 kubectl create -f ./k8s/serving-custom-model-flan-small.yaml
 ```
 
-Access model 
+### Port forwarding
 
+Use the line corresponding to the model you chose earlier:
+
+```bash
+kubectl port-forward --address 0.0.0.0 svc/flan-base 8888:80
+kubectl port-forward --address 0.0.0.0 svc/flan-small 8888:80
 ```
-kubectl port-forward --address 0.0.0.0 svc/flan-t5-base 8888:80
-kubectl port-forward --address 0.0.0.0 svc/flan-t5-small 8888:80
+
+### Access the model
+
+```bash
+curl localhost:8888/generate \
+    -X POST \
+    -d '{
+        "inputs": "Who won the 2014 FIFA World Cup?",
+        "parameters": {
+            "max_new_tokens": 64
+        }
+    }' \
+    -H 'Content-Type: application/json'
 ```
 
 Reference: 
 
 - https://predibase.github.io/lorax/getting_started/kubernetes/
 
-## Sagemaker
+
+## AWS Sagemaker
 
 
-Setup AWS creds and get Sagemaker role
+Make sure you have access to Google's gemma-2b model [here](https://huggingface.co/google/gemma-2b). If you don't have access, you can either request access in the [link](https://huggingface.co/google/gemma-2b) or use a different model below.
+
+Remember to setup your AWS credentials below and ensure access to Sagemaker.
 
 ```
-export AWS_ACCESS_KEY_ID="***"
-export AWS_SECRET_ACCESS_KEY="***"
-export AWS_SESSION_TOKEN="***"
+export AWS_ACCESS_KEY_ID=""
+export AWS_SECRET_ACCESS_KEY=""
+export AWS_SESSION_TOKEN=""
 export AWS_REGION=us-east-1
 ```
 
-Deploy model
+### Deploy the model
 
 ```
 python llm_inference/sagemaker_deploy.py deploy --endpoint-name gemma-2b-endpoint --model-name google/gemma-2b --hf-token $HUGGING_FACE_HUB_TOKEN
 ```
 
-Query model
+### Query the model
 
 ```
 example_input="Generate SQL for this user query: How many heads of the departments are older than 56 ? for next table schema: CREATE TABLE head (age INTEGER)"
 python llm_inference/sagemaker_deploy.py query --endpoint-name gemma-2b-endpoint --prompt $example_input
 ```
 
-Benchamark
+### Benchmarking
 
+Note: If you used a different endpoint name, please run `export ENDPOINT_NAME="YourEndpointNameHere"`
 
 ```
 locust -f llm_inference/load_sagemaker.py
