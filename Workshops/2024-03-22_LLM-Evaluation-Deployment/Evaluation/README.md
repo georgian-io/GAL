@@ -57,6 +57,14 @@ The `notebooks` directory contains a step-by-step, end-to-end example of a Q&A a
 ### Required: Using an LLM
 We use langchain for all the code in the notebooks. By default we are using an OpenAI model and thus require an OpenAI key. However, you can change the LLM being used and the code should still work. You can refer to the [LangChain documentation](https://python.langchain.com/docs/integrations/llms/) to change the LLM being used. The entire example will cost around $25 with OpenAI.
 
+If you wish to use a different API, say AnyScale, you could replace the OpenAI calls with the following:
+
+```python
+from langchain_community.chat_models import ChatAnyscale
+os.environ["ANYSCALE_API_KEY"] = "YOURKEYHERE"
+llm = ChatAnyscale(model_name="MODEL-NAME", temperature=0)
+```
+
 ### Optional: Using LangSmith or Langfuse
 LangSmith and Langfuse are observability tools to help evaluate LLM during development or monitoring during production. LangSmith is a tool provided by LangChain. As of February 2024, they provide the first 3000 traces per month for free, and each additional trace is $0.005.
 
