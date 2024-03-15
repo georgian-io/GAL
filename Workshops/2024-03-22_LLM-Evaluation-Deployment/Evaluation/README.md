@@ -41,7 +41,7 @@ pip install -r requirements.txt
 cp .env-template .env
 ```
 
-Add any necessary API keys there following the given format (see below for information on what keys are needed).
+Add any necessary API keys there following the given format. Specifically, you will need a key for your LLM (if you're using an API), a key for [LangSmith](https://smith.langchain.com/) (optional; it's called `LANGCHAIN_API_KEY` in the config), and a key for [Langfuse](https://langfuse.com/) (optional). Both LangSmith and Langfuse offer free API keys which can be obtained on their respective websites by creating an account. You can see the section below for mroe details.
 
 ## Quick-Start:
 
