@@ -51,7 +51,7 @@ conda create -n llm-deployment python=3.10
 conda activate llm-deployment
 pip install -r requirements.txt
 ```
-gi
+
 If you use pure Python:
 
 ```bash
@@ -68,26 +68,33 @@ pip install -r aws_requirements.txt
 
 ## Text Generation Interface
 
-### Run on GPU
+
+### 1. Run Docker
+
+Chose one of the options below (GPU  vs CPU) depending on your hardware.
+
+> **_NOTE:_**  If using an M1 or M2 Macbook, you might have to additionally set this env variable before running the commands below: `export DOCKER_DEFAULT_PLATFORM=linux/amd64`
+
+#### GPU
 
 ```bash
-docker run --gpus all --shm-size 1g -p 8080:80 -e HUGGING_FACE_HUB_TOKEN=$HUGGING_FACE_HUB_TOKEN -v $PWD:/data ghcr.io/huggingface/text-generation-inference:1.4.3 --model-id google/gemma-2b
+docker run --gpus all --shm-size 1g -p 8080:80 -e HUGGING_FACE_HUB_TOKEN=$HUGGING_FACE_HUB_TOKEN -v $PWD:/data ghcr.io/huggingface/text-generation-inference:1.4 --model-id google/gemma-2b
 ```
 
-### Run on CPU
+#### CPU
 
 ```bash
 docker run -it --shm-size 1g -p 8080:80 -e HUGGING_FACE_HUB_TOKEN=$HUGGING_FACE_HUB_TOKEN -v $PWD:/data ghcr.io/huggingface/text-generation-inference:1.4.3 --model-id google/flan-t5-small
 ```
 
-### Run the Client 
+### 2. Run the Client 
 
 ```bash
 example_input="Generate SQL for this user query: How many heads of the departments are older than 56 ? for next table schema: CREATE TABLE head (age INTEGER)"
 python llm_inference/clients.py tgi-requests-client $example_input --host=http://0.0.0.0:8080
 ```
 
-### Benchmarking
+### 3. Benchmarking
 
 ```bash
 locust -f llm_inference/load_tgi.py
@@ -145,28 +152,27 @@ Reference:
 kind create cluster --name llm-inference 
 ```
 
+### Deploy an endpoint and forwarding
+> Pick whichever model you want to use:
+
+#### Small
+
+```bash
+kubectl create -f ./k8s/serving-custom-model-flan-small.yaml
+kubectl port-forward --address 0.0.0.0 svc/flan-small 8888:80
+```
+
+#### Base
+
+```bash
+kubectl create -f ./k8s/serving-custom-model-flan-base.yaml
+kubectl port-forward --address 0.0.0.0 svc/flan-base 8888:80
+```
+
 ### Run UI for cluster 
 
 ```bash
 k9s -A 
-```
-
-### Deploy an endpoint
-
-Pick whichever model you want to use:
-
-```bash
-kubectl create -f ./k8s/serving-custom-model-flan-base.yaml
-kubectl create -f ./k8s/serving-custom-model-flan-small.yaml
-```
-
-### Port forwarding
-
-Use the line corresponding to the model you chose earlier:
-
-```bash
-kubectl port-forward --address 0.0.0.0 svc/flan-base 8888:80
-kubectl port-forward --address 0.0.0.0 svc/flan-small 8888:80
 ```
 
 ### Access the model
