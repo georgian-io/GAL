@@ -13,19 +13,19 @@ To get the most out of the Evaluation stream, please come prepared with a data s
 
 1. Setup your environment
 
-If you use Poetry:
-
-```bash
-poetry shell
-poetry install
-```
-
 If you use Conda:
 
 ```bash
 conda create -n llm-evaluation python=3.10
 conda activate llm-evaluation
 pip install -r requirements.txt
+```
+
+If you use Poetry:
+
+```bash
+poetry shell
+poetry install
 ```
 
 If you use pure Python:
