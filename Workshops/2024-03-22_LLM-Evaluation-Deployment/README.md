@@ -1,6 +1,6 @@
 # Transferred Learnings Workshop on LLM Evaluation & Deployment
 
-Large Language Models (LLMs) are increasingly used in various applications, from natural language processing tasks to content generation. The rapid advancement in generative AI and the role of LLMs in this advancement highlight the importance of properly evaluating and productionizing LLMs in a scalable and efficient way. This Workshop on LLM Evaluation and Deployment is designed to assist you in navigating the latest trends and tools for evaluating and deploying LLMs. The workshop contains the following streams:
+Large Language Models (LLMs) are increasingly used in various applications, from natural language processing tasks to content generation. The rapid advancement in generative AI and the role of LLMs in this advancement highlight the importance of properly evaluating and productionizing LLMs in a scalable and efficient way. This Workshop on LLM Evaluation and Deployment is designed to help in navigating the latest trends and tools for evaluating and deploying LLMs. The workshop contains the following streams:
 
 **Stream 1: LLM Evaluation**
 

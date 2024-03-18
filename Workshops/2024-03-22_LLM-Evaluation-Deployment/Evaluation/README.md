@@ -41,7 +41,7 @@ pip install -r requirements.txt
 cp .env-template .env
 ```
 
-Add any necessary API keys there following the given format (see below for information on what keys are needed).
+Add any necessary API keys there following the given format. Specifically, you will need a key for your LLM (if you're using an API), a key for [LangSmith](https://smith.langchain.com/) (optional; it's called `LANGCHAIN_API_KEY` in the config), and a key for [Langfuse](https://langfuse.com/) (optional). Both LangSmith and Langfuse offer free API keys which can be obtained on their respective websites by creating an account. You can see the section below for mroe details.
 
 ## Quick-Start:
 
@@ -55,7 +55,7 @@ The `notebooks` directory contains a step-by-step, end-to-end example of a Q&A a
 6. `06-optional-langfuse.ipynb`: [Optional] Using Langfuse for tracing and evaluation
 
 ### Required: Using an LLM
-We use langchain for all the code in the notebooks. By default we are using an OpenAI model and thus require an OpenAI key. However, you can change the LLM being used and the code should still work. You can refer to the [LangChain documentation](https://python.langchain.com/docs/integrations/llms/) to change the LLM being used. The entire example will cost around $25 with OpenAI.
+We use langchain for all the code in the notebooks. By default we are using an OpenAI model and thus require an OpenAI key. The entire example will cost around $25 with OpenAI. However, you can change the LLM being used and the code should still work. You can refer to the [LangChain documentation](https://python.langchain.com/docs/integrations/llms/) to change the LLM being used. The first notebook explains how to swap out OpenAI LLMs for others.
 
 ### Optional: Using LangSmith or Langfuse
 LangSmith and Langfuse are observability tools to help evaluate LLM during development or monitoring during production. LangSmith is a tool provided by LangChain. As of February 2024, they provide the first 3000 traces per month for free, and each additional trace is $0.005.

@@ -13,7 +13,11 @@ To participate in the Deployment stream, any trained or fine-tuned model should 
 
 ## Tools you need to install
 
+Most of this can be run locally. Note that `Lorax` requires an NVIDIA GPU, so you may not be able to run it without an instance. If you run into any issues, reach out to us via Slack or open up an issue on Github.
+
 - [python](https://www.python.org/)
+- [homebrew](https://brew.sh/)
+  - If you are on a Mac
 - [docker](https://docs.docker.com/engine/install/)
 - [kind](https://kind.sigs.k8s.io/docs/user/quick-start/)
   - `brew install kind`
@@ -28,6 +32,8 @@ To participate in the Deployment stream, any trained or fine-tuned model should 
   - `pip install awscli`
 - [Optional] GCP Users: [gcloud CLI](https://cloud.google.com/sdk/docs/install)
   - Please follow the instructions on the webpage linked above.
+
+> Note: You can run `install_deps.sh` to install all the packages mentioned above. This assumes you have Python and Docker installed.
 
 ## Services you need access to
 
