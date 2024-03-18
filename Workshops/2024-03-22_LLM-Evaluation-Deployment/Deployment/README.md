@@ -72,8 +72,9 @@ If you have access to AWS Sagemaker, run the following after setting up your env
 pip install -r aws_requirements.txt
 ```
 
-## Text Generation Interface
+# Workshop Code
 
+## Text Generation Interface
 
 ### 1. Run Docker
 
