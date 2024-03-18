@@ -3,5 +3,3 @@ requests_aws4auth==1.2.3
 boto3==1.34.63
 Pygments==2.17.2
 sagemaker==2.212.0
-torch==2.2.1
-transformers==4.36.0
