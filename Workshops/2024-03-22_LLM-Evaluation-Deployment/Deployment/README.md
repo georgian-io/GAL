@@ -2,12 +2,6 @@
 
 In this stream we'll cover the steps to deploy and serve your proof-of-concept including:
 
-<<<<<<< Updated upstream
-=======
-<<<<<<< Updated upstream
-Tools to install: 
-=======
->>>>>>> Stashed changes
 * How to use open-source (Mistral, LLaMa etc.) vs. closed-source (OpenAI, Anthropic etc.) models
 * The basics of serving models using tools and libraries like TGI, vLLM and Triton.
 * Advanced use cases such as multiple LoRAs, asynchronous inference, multimodal models.
@@ -22,6 +16,8 @@ To participate in the Deployment stream, any trained or fine-tuned model should 
 Most of this can be run locally. Note that `Lorax` requires an NVIDIA GPU, so you may not be able to run it without an instance. If you run into any issues, reach out to us via Slack or open up an issue on Github.
 
 - [python](https://www.python.org/)
+- [homebrew](https://brew.sh/)
+  - If you are on a Mac
 - [docker](https://docs.docker.com/engine/install/)
 - [kind](https://kind.sigs.k8s.io/docs/user/quick-start/)
   - `brew install kind`
