@@ -1,8 +1,7 @@
 awscli==1.32.63
 requests_aws4auth==1.2.3
 boto3==1.34.63
-easyllm==0.6.2
 Pygments==2.17.2
 sagemaker==2.212.0
 torch==2.2.1
-transformers==4.34.0
+transformers==4.36.0
