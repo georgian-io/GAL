@@ -1,14 +1,5 @@
 <a name="readme-top"></a>
 
-<!-- [![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url] -->
-
-
-
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
@@ -19,62 +10,17 @@
   <h3 align="center">Georgian AI Library (GAL)</h3>
 
 Welcome to the Georgian AI Library (GAL), where you can learn about AI research and use cases. Curated by the Georgian AI Team, this repository offers a collection of resources to help you stay up to date with AI developments and apply innovative solutions to your challenges. Dive into each research area to find overviews, links to resources, introductory notebooks and more. Our goal is to provide the knowledge and tools necessary to harness AI. 
-
-<!--   <p align="center">
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Request Feature</a>
-  </p> -->
     
 </div>
-
-
 
 <!-- TABLE OF CONTENTS -->
 #### Table of Contents
 <ol>
-    <li><a href="#getting-started">Getting Started</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contributing">Join Us</a></li>
-    <li><a href="#contact">Contact</a></li>
     <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
 </ol>
-
-
-<!-- GETTING STARTED -->
-## Getting Started
-Each year, our AI team conducts an analysis of significant AI/ML trends. By exploring blog posts, research papers, attending industry conferences and participating in events, we aim to stay informed and up-to-date.
-
-For each trend we follow these steps:
-
-- Conduct literature reviews.
-- Produce technical briefings.
-- Create introductory notebooks.
-- Apply our learnings to real-world use cases. 
-- Produce open-source, reusable assets and toolkits.
-
-We also:
-
-- Run benchmarks that aim to evaluate the performance of new techniques.
-- Develop playbooks to help users through the evolving AI landscape.
-
-In this repo, we share some of the outputs of our research.
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-- [ ] Generative AI - Models 
-- [ ] Generative AI - Data Flywheel
-- [ ] Generative AI - Neural Search Engine
-- [ ] Generative AI - MLOps
-- [ ] Generative AI - Multimodal
-- [ ] Generative AI - Responsible AI
-
 
 <!-- CONTRIBUTING -->
 ## Contributing
@@ -90,25 +36,22 @@ If you have a suggestion to enhance this project, fork the repo and create a pul
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTACT -->
 ## Contact
 If you have any questions or need further assistance, please feel free to reach out to our team. We're always eager to help and collaborate on exciting projects.
 
 Contacts: 
+- Akash Saravanan: [Email](akash.saravanan@georgian.io), [LinkedIn](https://www.linkedin.com/in/akashsara/)
 - Azin Asgarian: [Email](azin@georgian.io), [Twitter](https://twitter.com/azin_asg), [LinkedIn](https://www.linkedin.com/in/azin-asgarian/?originalSubdomain=ca)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
