@@ -66,7 +66,7 @@ source env/bin/activate
 pip install -r requirements.txt
 ```
 
-If you have access to AWS Sagemaker, run the following after setting up your environment above. Please note that pip may raise an error about potential incompatibilities, but this can be ignored.
+If you have access to AWS Sagemaker, run the following after setting up your environment above.
 
 ```bash
 pip install -r aws_requirements.txt
