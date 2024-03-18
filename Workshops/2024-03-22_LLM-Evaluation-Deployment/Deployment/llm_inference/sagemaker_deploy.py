@@ -5,10 +5,7 @@ from typing import Optional
 import boto3
 import sagemaker
 import typer
-from easyllm import prompt_utils
-from easyllm.clients import sagemaker as easyllm_sagemaker
 from sagemaker.huggingface import HuggingFaceModel, HuggingFacePredictor, get_huggingface_llm_image_uri
-from transformers import AutoModelForCausalLM, AutoTokenizer
 
 region_name = "us-east-1"
 
