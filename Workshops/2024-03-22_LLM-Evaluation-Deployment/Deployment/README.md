@@ -235,3 +235,17 @@ Note: If you used a different endpoint name, please run `export ENDPOINT_NAME="Y
 ```
 locust -f llm_inference/load_sagemaker.py
 ```
+
+# FAQ
+
+* I'm getting an error about `bitsandbytes` along the lines of ```The installed version of bitsandbytes was compiled without GPU support```.
+
+If you're using an M1/M2/M3 Macbook, this is unfortunately expected as `bitsandbytes` does not support those Macs yet. As such you may not be able to run the Text Generation Interface. We recommend trying it on different hardware such as a virtual machine or instance. Alternatively, you may skip it for the demo!
+
+* I'm getting a  ```docker: no matching manifest for linux/arm64/v8 in the manifest list entries.``` error (or something similar).
+
+Run the following in your terminal: `export DOCKER_DEFAULT_PLATFORM=linux/amd64` or add `--platform linux/amd64`  to the docker command.
+
+* I don't want to run so many `export` commands.
+
+Create a `.env` file and paste in all the environment variables such as `HUGGING_FACE_HUB_TOKEN` and `DOCKER_DEFAULT_PLATFORM`. Then simply run `source .env`. Thanks to Armando Rosario for the suggestion!
