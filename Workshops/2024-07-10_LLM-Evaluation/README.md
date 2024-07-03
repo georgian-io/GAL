@@ -39,7 +39,7 @@ pip install -r requirements.txt
 cp .env-template .env
 ```
 
-Add any necessary API keys there following the given format. Specifically, you will need a key for your LLM (if you're using an API), a key for [LangSmith](https://smith.langchain.com/) (optional; it's called `LANGCHAIN_API_KEY` in the config), and a key for [Langfuse](https://langfuse.com/) (optional).
+Add any necessary API keys there following the given format. Specifically, you will need a key for your LLM (this demo uses OpenAI).
 
 ## Quick-Start:
 
@@ -51,4 +51,5 @@ The `notebooks` directory contains a step-by-step, end-to-end example of a Q&A a
 4. `04-app-evaluation.ipynb`: Evaluate the app
 
 ### Required: Using an LLM
+
 We use langchain for all the code in the notebooks. By default we are using an OpenAI model and thus require an OpenAI key. The entire example will cost around $25 with OpenAI. 
